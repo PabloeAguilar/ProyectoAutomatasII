@@ -7,9 +7,6 @@
         mc:Ignorable="d"
         Title="Heraclito" Height="450" Width="864">
     <Grid>
-        <Grid.ColumnDefinitions>
-
-        </Grid.ColumnDefinitions>
         <Canvas HorizontalAlignment="Left" Height="289" Margin="10,106,0,0" VerticalAlignment="Top" Width="347" Background="#FFE31010">
             <TextBox Height="269" Canvas.Left="10" TextWrapping="Wrap" Text="TextBox" Canvas.Top="10" Width="327"/>
             <Canvas Height="289" Width="347" Background="#FFE31010" Canvas.Left="494">
