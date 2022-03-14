@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,25 @@ namespace ProyectoAutomatasII
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void btnVerificar_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                for (int i = 0; i < txtEntrada.LineCount; i++)
+                {
+                    txtblResultado.Text += txtEntrada.GetLineText(i);
+                }
+                
+            } catch (Exception x) { MessageBox.Show("Exeption" + x); }
+            
+        }
+
+        private void btnLimpiar_Click(object sender, RoutedEventArgs e)
+        {
+            txtEntrada.Clear();
+            txtblResultado.Text = "";
         }
     }
 }
