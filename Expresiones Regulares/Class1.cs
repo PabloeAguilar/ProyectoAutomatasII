@@ -11,24 +11,37 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
     {
         static string TERMINADOR = ";";
         static string IGUAL = "=";
-        static string AND = "*";
-        static string OR = "+";
+        static string AND = "\\*";
+        static string OR = "\\+";
         static string NOT = "-";
         static string ENTONCES = "->";
         static string DOBLEENTONCES = "<->";
-        static string PARENTESISAPERTURA = "(";
-        static string PARENTESISCIERRE = ")";
+        static string PARENTESISAPERTURA = "\\(";
+        static string PARENTESISCIERRE = "\\)";
         static string IMPRIMIREXPRESION = "writelog";
         static string IMPRIMIRCADENA = "writestr";
         static string IMPRIMIRRETORNO = "writeintro";
         static string CADENA = ".+";
-        static string VARIABLE = "([a-zA-Z][a-zA-Z0-9]*|_[a-zA-Z0-9]+)";
+        static string VARIABLE = "[a-zA-Z][a-zA-Z0-9]*|_[a-zA-Z0-9]+";
         static string TAUTOLOGIA = "tauto";
         static string IMPRIMIRTABLA = "writetabla";
         static string CONTRADICCION = "contra";
         static string DECIDIBLE = "deci";
-        static string CONSTANTE = "(1|0)";
+        // Asignaciones
+        static string FUNCIONES = "^(" + CONTRADICCION + "|" + TAUTO + "|" + DECI + ")$";
+        // Gramaticas
+        static string OPERADOR = "(" + AND + "|" + OR + "|" + ENTONCES + "|" + DOBLEENTONCES + ")";
+        static string ASIGNACION = "^(" + VARIABLE + ")(" + IGUAL + ")(" + EXPRESION + ")$";// | " + FUNCIONES + ")(" + TERMINADOR + ")$";
+        static string EXPRESION = "(" + NOT + "?" + VARIABLE + ")(" + OPERADOR + "(((-)?" + VARIABLE + ")|" + NOT + "?" + PARENTESISAPERTURA + "((" + NOT + "?" + VARIABLE + ")" + OPERADOR + ")*(" + NOT + "?" + VARIABLE + ")" + PARENTESISCIERRE + "))*";
+        static string WLOG = "^(" + IMPRIMIREXPRESION + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE + TERMINADOR + ")"; // IMPRIMIR EXPRESION
+        static string WSTR = "^(" + IMPRIMIRCADENA + PARENTESISAPERTURA +CADENA + PARENTESISCIERRE + TERMINADOR + PARENTESISCIERRE + TERMINADOR + ")$"; //IMPRIMIR CADENA
+        static string WINTRO = "^(" + IMPRIMIRRETORNO + PARENTESISAPERTURA + PARENTESISCIERRE + TERMINADOR + ")$"; // IMPRIMIR RETORNO
+        static string WTABLA = "^(" + IMPRIMIRTABLA + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE + TERMINADOR + ")$";
+        static string TAUTO = "^(" + TAUTOLOGIA + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE + TERMINADOR + ")$";
+        static string CONTRA = "^(" + CONTRADICCION + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE + TERMINADOR + ")$";
+        static string DECI = "^(" + DECIDIBLE + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE + TERMINADOR + ")";
 
+        /*
         public static bool TTerminador(string cadena)
         {
             return Regex.IsMatch(cadena, TERMINADOR);
@@ -122,6 +135,42 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
         public static bool TCONSTANTE(string cadena)
         {
             return Regex.IsMatch(cadena, CONSTANTE);
+        }
+        */
+        public static bool GLEXPRESION(string cadena)
+        {
+            if (Regex.IsMatch(cadena, ASIGNACION) == true)
+            {
+                return true;
+            } else if (Regex.IsMatch(cadena, WLOG))
+            {
+                return true;
+            } else if (Regex.IsMatch(cadena, WSTR))
+            {
+                return true;
+            } else if (Regex.IsMatch(cadena, WINTRO))
+            {
+                return true;
+            } else if (Regex.IsMatch(cadena, WTABLA))
+            {
+                return true;
+            } else if (Regex.IsMatch(cadena, TAUTO))
+            {
+                return true;
+            } else if (Regex.IsMatch(cadena, CONTRA))
+            {
+                return true;
+            } else if (Regex.IsMatch(cadena, DECI))
+            {
+                return true;
+            }
+            else
+                return false;        
+        }
+
+        public static bool GLASIGNACION(string cadena)
+        {
+            return Regex.IsMatch(cadena, "^(" + VARIABLE + ")(" + IGUAL + ")(" + EXPRESION + ")$");
         }
     }
 }

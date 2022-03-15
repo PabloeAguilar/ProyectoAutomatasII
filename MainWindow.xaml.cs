@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ProyectoAutomatasII.Expresiones_Regulares;
 
 namespace ProyectoAutomatasII
 {
@@ -28,26 +29,35 @@ namespace ProyectoAutomatasII
 
         private void btnVerificar_Click(object sender, RoutedEventArgs e)
         {
+            txtblResultado.Text = "";
             try
             {
                 for (int i = 0; i < txtEntrada.LineCount; i++)
                 {
-                    txtblResultado.Text += txtEntrada.GetLineText(i);
+                    if (Class1.GLASIGNACION(txtEntrada.GetLineText(i)))
+                        txtblResultado.Text += "Renglón Correcto" + i.ToString() + "\n";
+                    else
+                        txtblResultado.Text += "Renglón Incorrecto" + i.ToString() + "\n";
                 }
-                
+            
             } catch (Exception x) { MessageBox.Show("Exeption" + x); }
             
         }
 
         private void btnLimpiar_Click(object sender, RoutedEventArgs e)
         {
-            txtEntrada.Clear();
-            txtblResultado.Text = "";
+            Limpiar();
         }
 
         private void btnVerificar_SizeChanged(object sender, SizeChangedEventArgs e)
         {
 
+        }
+        
+        private void Limpiar()
+        {
+            txtEntrada.Clear();
+            txtblResultado.Text = "";
         }
     }
 }
