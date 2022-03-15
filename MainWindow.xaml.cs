@@ -44,5 +44,10 @@ namespace ProyectoAutomatasII
             txtEntrada.Clear();
             txtblResultado.Text = "";
         }
+
+        private void btnVerificar_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+
+        }
     }
 }

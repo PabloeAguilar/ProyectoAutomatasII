@@ -8,22 +8,23 @@
         Title="Heraclito" Height="362" Width="875" WindowStyle="SingleBorderWindow" FontFamily="Consolas" FontSize="16" >
     <Grid Background="#FF647BE7">
         <Grid.RowDefinitions>
-            <RowDefinition Height="145*"/>
-            <RowDefinition Height="167*"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="358*"/>
             <ColumnDefinition Width="155*"/>
             <ColumnDefinition Width="362*"/>
         </Grid.ColumnDefinitions>
-        <Border BorderThickness="1" CornerRadius="8" Background="#FF7BD8C0" Margin="10,13,1,10" Grid.RowSpan="2" >
+        <Border BorderThickness="1" CornerRadius="8" Background="#FF7BD8C0" Margin="10,13,1,10" >
             <TextBox x:Name="txtEntrada" TextWrapping="Wrap" Margin="9,9,9,9" AcceptsReturn="True"/>
         </Border>
-        <Border BorderThickness="1" CornerRadius="8" Background="#FF7BD8C0" Margin="5,13,10,10" Grid.Column="2" Grid.RowSpan="2" >
+        <Border BorderThickness="1" CornerRadius="8" Background="#FF7BD8C0" Margin="5,13,10,10" Grid.Column="2" >
             <TextBlock x:Name="txtblResultado" Margin="11,11,10,9" TextWrapping="Wrap" Background="White"/>
         </Border>
-
-        <Button x:Name="btnVerificar" Content="Verificar" BorderThickness="1" Margin="24,0,20,11" VerticalAlignment="Bottom" Height="59" Background="#FFF2C65B" Grid.Column="1" Click="btnVerificar_Click"/>
-        <Button x:Name="btnLimpiar" Content="Limpiar" Margin="24,13,20,0" VerticalAlignment="Top" Height="59" Background="#FFF2C65B" Grid.Column="1" Grid.Row="1" Click="btnLimpiar_Click"/>
+        <StackPanel Margin="4,0,0,0" RenderTransformOrigin="0.505,0.674" Grid.Column="1" VerticalAlignment="Center" Height="339">
+            <Button x:Name="btnVerificar" Content="Verificar" BorderThickness="1" Background="#FFF2C65B" Click="btnVerificar_Click" Height="59" VerticalAlignment="Stretch" Width="111" Margin="0, 30, 0 ,30"/>
+            <Button x:Name="btnAbrir" Content="Abrir" Background="#FFF2C65B" Click="btnLimpiar_Click" Height="58" Width="111" Margin="0, 30, 0 ,30"/>
+            <Button x:Name="btnLimpiar" Content="Limpiar" Background="#FFF2C65B" Click="btnLimpiar_Click" Height="58" Width="111" Margin="0, 30, 0 ,30"/>
+        </StackPanel>
     </Grid>
 </Window>
