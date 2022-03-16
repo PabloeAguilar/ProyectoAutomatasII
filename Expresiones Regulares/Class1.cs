@@ -31,11 +31,14 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
         
         // Gramaticas
         static string OPERADOR = "(" + AND + "|" + OR + "|" + ENTONCES + "|" + DOBLEENTONCES + ")";
-        static string ASIGNACION = "^(" + VARIABLE + ")(" + IGUAL + ")(" + EXPRESION + ")$"; //|" + FUNCIONES + ")(" + TERMINADOR + ")$";
-        //
-        static string EXPRESION = "^((" + NOT + ")?" + VARIABLE + ")((" + OPERADOR + ")(((" + NOT + ")?" +
-                                   VARIABLE + ")|(" + NOT + ")?" + PARENTESISAPERTURA + "(((" + NOT + ")?" + 
+        static string EXPRESION = "((" + NOT + ")?" + VARIABLE + ")((" + OPERADOR + ")(((" + NOT + ")?" +
+                                   VARIABLE + ")|(" + NOT + ")?" + PARENTESISAPERTURA + "(((" + NOT + ")?" +
                                    VARIABLE + ")(" + OPERADOR + "))*((" + NOT + ")?" + VARIABLE + ")" + PARENTESISCIERRE + "))*";
+
+        static string ASIGNACION = "^(" + VARIABLE + ")(" + IGUAL + ")("+ EXPRESION + ")(" +TERMINADOR + ")($|\\s)"; //|" + FUNCIONES + ")(" + TERMINADOR + ")$";
+        //
+        
+        
 
         static string WLOG = "^(" + IMPRIMIREXPRESION + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE + TERMINADOR + ")"; // IMPRIMIR EXPRESION
         static string WSTR = "^(" + IMPRIMIRCADENA + PARENTESISAPERTURA +CADENA + PARENTESISCIERRE + TERMINADOR + PARENTESISCIERRE + TERMINADOR + ")$"; //IMPRIMIR CADENA
@@ -177,7 +180,7 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
 
         public static bool GLASIGNACION(string cadena)
         {
-            return Regex.IsMatch(cadena, EXPRESION + "\\s");
+            return Regex.IsMatch(cadena, ASIGNACION);
         }
     }
 }
