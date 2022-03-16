@@ -35,9 +35,9 @@ namespace ProyectoAutomatasII
                 for (int i = 0; i < txtEntrada.LineCount; i++)
                 {
                     if (Class1.GLASIGNACION(txtEntrada.GetLineText(i)))
-                        txtblResultado.Text += "Renglón Correcto" + i.ToString() + "\n";
+                        txtblResultado.Text += "Renglón Correcto" + (i+1).ToString() + "\n";
                     else
-                        txtblResultado.Text += "Renglón Incorrecto" + i.ToString() + "\n";
+                        txtblResultado.Text += "Renglón Incorrecto" + (i+1).ToString() + "\n";
                 }
             
             } catch (Exception x) { MessageBox.Show("Exeption" + x); }
