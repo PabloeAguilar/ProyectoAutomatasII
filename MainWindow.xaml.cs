@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -39,7 +40,7 @@ namespace ProyectoAutomatasII
                 {
                     foreach (char l in txtEntrada.GetLineText(i))
                     {
-                        if (l != ' ')
+                        if (l != ' ' || l.ToString() != "")
                         {
                             aux += l.ToString();
                         }
@@ -47,9 +48,9 @@ namespace ProyectoAutomatasII
                     if (aux.Length != 0)
                     {
                         if (Class1.GLEXPRESION(aux))
-                            txtblResultado.Text += txtEntrada.GetLineText(i) + " //Correcto\n";
-                        else
-                            txtblResultado.Text += txtEntrada.GetLineText(i) + " //Incorrecto\n";
+                            txtblResultado.Text += Regex.Replace(txtEntrada.GetLineText(i), "(\\r\\n)*", "") + " //Correcto\n";
+                        else if (aux != "\r\n")
+                            txtblResultado.Text += Regex.Replace(txtEntrada.GetLineText(i), "(\\r\\n)*", "") + " //Incorrecto\n";
                         aux = "";
                     }
                 }
