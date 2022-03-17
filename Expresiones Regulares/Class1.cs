@@ -21,7 +21,7 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
         static string IMPRIMIREXPRESION = "writelog";
         static string IMPRIMIRCADENA = "writestr";
         static string IMPRIMIRRETORNO = "writeintro";
-        static string CADENA = "[.]+";
+        static string CADENA = "\\\".+\\\"";
         static string VARIABLE = "[a-zA-Z][a-zA-Z0-9]*|_[a-zA-Z0-9]+";
         static string TAUTOLOGIA = "tauto";
         static string IMPRIMIRTABLA = "writetabla";
