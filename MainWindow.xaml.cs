@@ -22,6 +22,7 @@ namespace ProyectoAutomatasII
     /// </summary>
     public partial class MainWindow : Window
     {
+        string aux = "";
         public MainWindow()
         {
             InitializeComponent();
@@ -34,10 +35,20 @@ namespace ProyectoAutomatasII
             {
                 for (int i = 0; i < txtEntrada.LineCount; i++)
                 {
-                    if (Class1.GLASIGNACION(txtEntrada.GetLineText(i)))
-                        txtblResultado.Text += "Renglón Correcto" + (i+1).ToString() + "\n";
-                    else
-                        txtblResultado.Text += "Renglón Incorrecto" + (i+1).ToString() + "\n";
+                    foreach (char l in txtEntrada.GetLineText(i))
+                    {
+                        if (l != ' ')
+                        {
+                            aux += l.ToString();
+                        }
+                    }
+                    if (aux.Length != 0)
+                    {
+                        if (Class1.GLEXPRESION(aux))
+                            txtblResultado.Text += txtEntrada.GetLineText(i).Remove(txtEntrada.GetLineText(i).Length - 2) + " //Correcto\n";
+                        else
+                            txtblResultado.Text += txtEntrada.GetLineText(i).Remove(txtEntrada.GetLineText(i).Length - 2) + " //Incorrecto\n";
+                    }
                 }
             
             } catch (Exception x) { MessageBox.Show("Exeption" + x); }
@@ -59,5 +70,6 @@ namespace ProyectoAutomatasII
             txtEntrada.Clear();
             txtblResultado.Text = "";
         }
+
     }
 }

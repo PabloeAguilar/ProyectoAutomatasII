@@ -35,7 +35,7 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
                                    VARIABLE + ")|(" + NOT + ")?" + PARENTESISAPERTURA + "(((" + NOT + ")?" +
                                    VARIABLE + ")(" + OPERADOR + "))*((" + NOT + ")?" + VARIABLE + ")" + PARENTESISCIERRE + "))*";
 
-        static string ASIGNACION = "^(" + VARIABLE + ")(" + IGUAL + ")("+ EXPRESION + ")(" +TERMINADOR + ")($|\\s)"; //|" + FUNCIONES + ")(" + TERMINADOR + ")$";
+        static string ASIGNACION = "^(" + VARIABLE + ")(" + IGUAL + ")("+ EXPRESION + "|" + FUNCIONES + ")(" + TERMINADOR + ")($|\\s)";
         //
         
         
@@ -178,9 +178,5 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
                 return false;        
         }
 
-        public static bool GLASIGNACION(string cadena)
-        {
-            return Regex.IsMatch(cadena, ASIGNACION);
-        }
     }
 }
