@@ -22,7 +22,7 @@ namespace ProyectoAutomatasII
     /// </summary>
     public partial class MainWindow : Window
     {
-        string aux = "";
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -30,6 +30,8 @@ namespace ProyectoAutomatasII
 
         private void btnVerificar_Click(object sender, RoutedEventArgs e)
         {
+            string aux = "";
+
             txtblResultado.Text = "";
             try
             {
@@ -45,9 +47,10 @@ namespace ProyectoAutomatasII
                     if (aux.Length != 0)
                     {
                         if (Class1.GLEXPRESION(aux))
-                            txtblResultado.Text += txtEntrada.GetLineText(i).Remove(txtEntrada.GetLineText(i).Length - 2) + " //Correcto\n";
+                            txtblResultado.Text += txtEntrada.GetLineText(i) + " //Correcto\n";
                         else
-                            txtblResultado.Text += txtEntrada.GetLineText(i).Remove(txtEntrada.GetLineText(i).Length - 2) + " //Incorrecto\n";
+                            txtblResultado.Text += txtEntrada.GetLineText(i) + " //Incorrecto\n";
+                        aux = "";
                     }
                 }
             
