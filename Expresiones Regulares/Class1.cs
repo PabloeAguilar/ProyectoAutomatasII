@@ -21,7 +21,7 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
         static string IMPRIMIREXPRESION = "writelog";
         static string IMPRIMIRCADENA = "writestr";
         static string IMPRIMIRRETORNO = "writeintro";
-        static string CADENA = ".+";
+        static string CADENA = "[.]+";
         static string VARIABLE = "[a-zA-Z][a-zA-Z0-9]*|_[a-zA-Z0-9]+";
         static string TAUTOLOGIA = "tauto";
         static string IMPRIMIRTABLA = "writetabla";
@@ -35,22 +35,22 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
                                    VARIABLE + ")|(" + NOT + ")?" + PARENTESISAPERTURA + "(((" + NOT + ")?" +
                                    VARIABLE + ")(" + OPERADOR + "))*((" + NOT + ")?" + VARIABLE + ")" + PARENTESISCIERRE + "))*";
 
-        static string ASIGNACION = "^(" + VARIABLE + ")(" + IGUAL + ")("+ EXPRESION + "|" + FUNCIONES + ")(" + TERMINADOR + ")($|\\s)";
-        //
+        
         
         
 
-        static string WLOG = "^(" + IMPRIMIREXPRESION + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE + TERMINADOR + ")"; // IMPRIMIR EXPRESION
-        static string WSTR = "^(" + IMPRIMIRCADENA + PARENTESISAPERTURA +CADENA + PARENTESISCIERRE + TERMINADOR + PARENTESISCIERRE + TERMINADOR + ")$"; //IMPRIMIR CADENA
-        static string WINTRO = "^(" + IMPRIMIRRETORNO + PARENTESISAPERTURA + PARENTESISCIERRE + TERMINADOR + ")$"; // IMPRIMIR RETORNO
-        static string WTABLA = "^(" + IMPRIMIRTABLA + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE + TERMINADOR + ")$";
+        static string WLOG = "^(" + IMPRIMIREXPRESION + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE + TERMINADOR + ")($|\\s)";
+        static string WSTR = "^(" + IMPRIMIRCADENA + PARENTESISAPERTURA +CADENA + PARENTESISCIERRE + TERMINADOR + ")($|\\s)";
+        static string WINTRO = "^(" + IMPRIMIRRETORNO + PARENTESISAPERTURA + PARENTESISCIERRE + TERMINADOR + ")($|\\s)";
+        static string WTABLA = "^(" + IMPRIMIRTABLA + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE + TERMINADOR + ")($|\\s)";
 
         static string TAUTO = "(" + TAUTOLOGIA + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE+")";
         static string CONTRA = "(" + CONTRADICCION + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE +")";
         static string DECI = "(" + DECIDIBLE + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE + ")";
-        static string FUNCIONES = "^(" + CONTRA + "|" + TAUTO + "|" + DECI + ")";
-
-
+        static string FUNCIONES = "(" + CONTRA + "|" + TAUTO + "|" + DECI + ")";
+        static string ASIGNACION = "^(" + VARIABLE + ")(" + IGUAL + ")" +
+            "(" + EXPRESION + "|" + FUNCIONES + ")(" + TERMINADOR + ")($|\\s)";
+        
         /*
         public static bool TTerminador(string cadena)
         {
