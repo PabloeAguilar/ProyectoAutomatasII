@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProyectoAutomatasII"
         mc:Ignorable="d"
-        Title="Heraclito" Height="362" Width="875" WindowStyle="SingleBorderWindow" FontFamily="Consolas" FontSize="16" WindowState="Maximized" WindowStartupLocation="CenterScreen" >
+        Title="Heraclito" Height="362" Width="875" WindowStyle="SingleBorderWindow" FontFamily="Consolas" FontSize="16" >
     <Grid Background="#FF647BE7">
         <Grid.RowDefinitions>
             <RowDefinition/>
