@@ -40,11 +40,12 @@ namespace ProyectoAutomatasII
                 {
                     foreach (char l in txtEntrada.GetLineText(i))
                     {
-                        if (l != ' ' || l.ToString() != "")
+                        if (l != ' ' || l.ToString() != "" )
                         {
                             aux += l.ToString();
                         }
                     }
+                   
                     if (aux.Length != 0)
                     {
                         if (Class1.GLEXPRESION(aux))
