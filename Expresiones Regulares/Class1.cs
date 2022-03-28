@@ -21,37 +21,30 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
         static string IMPRIMIREXPRESION = "writelog";
         static string IMPRIMIRCADENA = "writestr";
         static string IMPRIMIRRETORNO = "writeintro";
-        static string CADENA = "\\\".+\\\"";
+        static string CADENA = "\".+\"";
         static string VARIABLE = "[a-zA-Z][a-zA-Z0-9]*|_[a-zA-Z0-9]+";
         static string TAUTOLOGIA = "tauto";
         static string IMPRIMIRTABLA = "writetabla";
         static string CONTRADICCION = "contra";
         static string DECIDIBLE = "deci";
-        // Asignaciones
-        
-        // Gramaticas
+
         static string OPERADOR = "(" + AND + "|" + OR + "|" + ENTONCES + "|" + DOBLEENTONCES + ")";
         static string EXPRESION = "((" + NOT + ")?" + VARIABLE + ")((" + OPERADOR + ")(((" + NOT + ")?" +
                                    VARIABLE + ")|(" + NOT + ")?" + PARENTESISAPERTURA + "(((" + NOT + ")?" +
                                    VARIABLE + ")(" + OPERADOR + "))*((" + NOT + ")?" + VARIABLE + ")" + PARENTESISCIERRE + "))*";
 
-        
-        
-        
-
         static string WLOG = "^(" + IMPRIMIREXPRESION + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE + TERMINADOR + ")($|\\s)";
-        static string WSTR = "^(" + IMPRIMIRCADENA + PARENTESISAPERTURA +CADENA + PARENTESISCIERRE + TERMINADOR + ")($|\\s)";
+        static string WSTR = "^(" + IMPRIMIRCADENA + PARENTESISAPERTURA + CADENA + PARENTESISCIERRE + TERMINADOR + ")($|\\s)";
         static string WINTRO = "^(" + IMPRIMIRRETORNO + PARENTESISAPERTURA + PARENTESISCIERRE + TERMINADOR + ")($|\\s)";
         static string WTABLA = "^(" + IMPRIMIRTABLA + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE + TERMINADOR + ")($|\\s)";
 
-        static string TAUTO = "(" + TAUTOLOGIA + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE+")";
-        static string CONTRA = "(" + CONTRADICCION + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE +")";
+        static string TAUTO = "(" + TAUTOLOGIA + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE + ")";
+        static string CONTRA = "(" + CONTRADICCION + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE + ")";
         static string DECI = "(" + DECIDIBLE + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE + ")";
         static string FUNCIONES = "(" + CONTRA + "|" + TAUTO + "|" + DECI + ")";
-        static string ASIGNACION = "^(" + VARIABLE + ")(" + IGUAL + ")" +
-            "(" + EXPRESION + "|" + FUNCIONES + ")(" + TERMINADOR + ")($|\\s)";
+        static string ASIGNACION = "^(" + VARIABLE + ")(" + IGUAL + ")((" + EXPRESION + "|" + FUNCIONES + ")|(" + PARENTESISAPERTURA + ")" +
+            "(" + EXPRESION + "|" + FUNCIONES + ")(" + PARENTESISCIERRE + "))(" + TERMINADOR + ")($|\\s)";
         
-        /*
         public static bool TTerminador(string cadena)
         {
             return Regex.IsMatch(cadena, TERMINADOR);
@@ -141,12 +134,7 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
         {
             return Regex.IsMatch(cadena, DECIDIBLE);
         }
-
-        public static bool TCONSTANTE(string cadena)
-        {
-            return Regex.IsMatch(cadena, CONSTANTE);
-        }
-        */
+        
         public static bool GLEXPRESION(string cadena)
         {
             if (Regex.IsMatch(cadena, ASIGNACION) == true)

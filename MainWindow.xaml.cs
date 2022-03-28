@@ -50,6 +50,7 @@ namespace ProyectoAutomatasII
                         if (Class1.GLEXPRESION(aux))
                             txtblResultado.Text += Regex.Replace(txtEntrada.GetLineText(i), "(\\r\\n)*", "") + " //Correcto\n";
                         else if (aux != "\r\n")
+                            //Indicar tipo de error
                             txtblResultado.Text += Regex.Replace(txtEntrada.GetLineText(i), "(\\r\\n)*", "") + " //Incorrecto\n";
                         aux = "";
                     }
