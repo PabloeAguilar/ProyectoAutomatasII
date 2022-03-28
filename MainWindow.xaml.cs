@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
 using ProyectoAutomatasII.Expresiones_Regulares;
 
 namespace ProyectoAutomatasII
@@ -23,7 +24,8 @@ namespace ProyectoAutomatasII
     /// </summary>
     public partial class MainWindow : Window
     {
-        
+        string nombreArchivo = ".txt";
+        //string direccion = "";
         public MainWindow()
         {
             InitializeComponent();
@@ -62,7 +64,30 @@ namespace ProyectoAutomatasII
 
         private void btnLimpiar_Click(object sender, RoutedEventArgs e)
         {
-            Limpiar();
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "(*txt)|*.txt";
+            ofd.Multiselect = false;
+            ofd.Title = "Abrir archivo";
+            //ofd.InitialDirectory = "C:\\Users\\pablo\\Desktop";
+            ofd.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
+
+            if ((bool)ofd.ShowDialog())
+            {
+                Limpiar();
+                nombreArchivo = ofd.FileName;
+                using (StreamReader red = new StreamReader(ofd.FileName))
+                {
+                    string line;
+                    while ((line = red.ReadLine()) != null)
+                    {
+                        
+                        txtEntrada.Text += (line + "\r\n");
+                        
+                    }
+                }
+            }
+            
         }
 
         private void btnVerificar_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -76,5 +101,23 @@ namespace ProyectoAutomatasII
             txtblResultado.Text = "";
         }
 
+        private void btnGuardar_Click(object sender, RoutedEventArgs e)
+        {
+            using (StreamWriter writer  = new StreamWriter(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\reg.txt"), append:false, Encoding.ASCII))
+            {
+                int i = 0;
+                string linea;
+                while (i < txtEntrada.LineCount)
+                {
+                    linea = txtEntrada.GetLineText(i);
+                    writer.WriteLine(linea);
+                    i++;
+                }
+//                writer.Flush();
+                writer.Close();
+                
+            }
+            MessageBox.Show("Archivo guardado en el escritorio como: reg.txt");
+        }
     }
 }
