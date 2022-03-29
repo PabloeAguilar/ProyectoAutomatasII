@@ -44,9 +44,7 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
         static string FUNCIONES = "(" + CONTRA + "|" + TAUTO + "|" + DECI + ")";
         static string ASIGNACION = "^(" + VARIABLE + ")(" + IGUAL + ")((" + EXPRESION + "|" + FUNCIONES + ")|(" + PARENTESISAPERTURA + ")" +
             "(" + EXPRESION + "|" + FUNCIONES + ")(" + PARENTESISCIERRE + "))(" + TERMINADOR + ")($|\\s)";
-        /*
-        static string ASIGNACION = "^(" + VARIABLE + ")(" + IGUAL + ")(" + EXPRESION + "|" + FUNCIONES + ")(" + TERMINADOR + ")($|\\s)";*/
-
+        
         public static bool TTerminador(string cadena)
         {
             return Regex.IsMatch(cadena, TERMINADOR);
