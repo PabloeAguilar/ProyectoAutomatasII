@@ -48,6 +48,33 @@ namespace ProyectoAutomatasII
                         txtblResultado1.Text += a.Nombre + " ";
                     }
                     txtblResultado1.Text += "\n";
+                    string errorLexico = VerificacionErroresLexicos.EliminacionTokens(txtEntrada.GetLineText(i), tokens);
+                    string[] errores = errorLexico.Split(' ');
+
+                    if (errores.Length > 0)
+                    {
+                        int j = 0;
+                        foreach (string error in errores)
+                        {
+                            if (error != " " && error != "" && error != "\r" && error != "\n")
+                            {
+                                foreach (char letra in error)
+                                {
+                                    if (letra != '\r' && letra != '\n')
+                                    {
+                                        txtblResultado1.Text += "Error en la linea " + (i + 1) + ": Simbolo no definido: " + letra + "\n";
+                                    }
+                                    
+                                }
+                                
+                                
+                            }
+                            j++;
+
+                        }
+                        
+                    }
+
                     foreach (char l in txtEntrada.GetLineText(i))
                     {
                         
