@@ -45,6 +45,7 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
         static string ASIGNACION = "^(" + VARIABLE + ")(" + IGUAL + ")((" + EXPRESION + "|" + FUNCIONES + ")|(" + PARENTESISAPERTURA + ")" +
             "(" + EXPRESION + "|" + FUNCIONES + ")(" + PARENTESISCIERRE + "))(" + TERMINADOR + ")($|\\s)";
         
+
         public static bool TTerminador(string cadena)
         {
             return Regex.IsMatch(cadena, TERMINADOR);
@@ -166,5 +167,129 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
                 return false;        
         }
 
+        public static List<Token> Tokens (string cadena)
+        {
+            List<string> reservadas = new List<string> {
+                IMPRIMIREXPRESION, IMPRIMIRCADENA,
+                IMPRIMIRRETORNO, TAUTOLOGIA, IMPRIMIRTABLA, CONTRADICCION, DECIDIBLE}            ;
+            ///Summary Recibe una cadena y devuelve una lista con los tokens encontrados
+            ///
+            List<Token> tokens = new List<Token>();
+            
+            Match tokenAux = Regex.Match(cadena, IMPRIMIRCADENA);
+            while (tokenAux.Value != "")
+            {
+                tokens.Add(new Token("IMPRIMIRCADENA", tokenAux.Value, pos:tokenAux.Index));
+                tokenAux = tokenAux.NextMatch();
+            }
+            tokenAux = Regex.Match(cadena, IMPRIMIREXPRESION);
+            while (tokenAux.Value != "")
+            {
+                tokens.Add(new Token("IMPRIMIREXPRESION", tokenAux.Value, pos: tokenAux.Index));
+                tokenAux = tokenAux.NextMatch();
+            }
+            tokenAux = Regex.Match(cadena, IMPRIMIRRETORNO);
+            while (tokenAux.Value != "")
+            {
+                tokens.Add(new Token("IMPRIMIRRETORNO", tokenAux.Value, pos: tokenAux.Index));
+                tokenAux = tokenAux.NextMatch();
+            }
+            tokenAux = Regex.Match(cadena, IMPRIMIRTABLA);
+            while (tokenAux.Value != "")
+            {
+                tokens.Add(new Token("IMPRIMIRTABLA", tokenAux.Value, pos: tokenAux.Index));
+                tokenAux = tokenAux.NextMatch();
+            }
+            tokenAux = Regex.Match(cadena, TERMINADOR);
+            while (tokenAux.Value != "")
+            {
+                tokens.Add(new Token("TERMINADOR", tokenAux.Value, pos: tokenAux.Index));
+                tokenAux = tokenAux.NextMatch();
+            }
+            tokenAux = Regex.Match(cadena, IGUAL);
+            while (tokenAux.Value != "")
+            {
+                tokens.Add(new Token("IGUAL", tokenAux.Value, pos: tokenAux.Index));
+                tokenAux = tokenAux.NextMatch();
+            }
+            tokenAux = Regex.Match(cadena, AND);
+            while (tokenAux.Value != "")
+            {
+                tokens.Add(new Token("AND", tokenAux.Value, pos: tokenAux.Index));
+                tokenAux = tokenAux.NextMatch();
+            }
+            tokenAux = Regex.Match(cadena, OR);
+            while (tokenAux.Value != "")
+            {
+                tokens.Add(new Token("OR", tokenAux.Value, pos: tokenAux.Index));
+                tokenAux = tokenAux.NextMatch();
+            }
+            tokenAux = Regex.Match(cadena, NOT);
+            while (tokenAux.Value != "")
+            {
+                tokens.Add(new Token("NOT", tokenAux.Value, pos: tokenAux.Index));
+                tokenAux = tokenAux.NextMatch();
+            }
+            tokenAux = Regex.Match(cadena, ENTONCES);
+            while (tokenAux.Value != "")
+            {
+                tokens.Add(new Token("ENTONCES", tokenAux.Value, pos: tokenAux.Index));
+                tokenAux = tokenAux.NextMatch();
+            }
+            tokenAux = Regex.Match(cadena, DOBLEENTONCES);
+            while (tokenAux.Value != "")
+            {
+                tokens.Add(new Token("DOBLEENTONCES", tokenAux.Value, pos: tokenAux.Index));
+                tokenAux = tokenAux.NextMatch();
+            }
+            tokenAux = Regex.Match(cadena, PARENTESISAPERTURA);
+            while (tokenAux.Value != "")
+            {
+                tokens.Add(new Token("PARENTESISAPERTURA", tokenAux.Value, pos: tokenAux.Index));
+                tokenAux = tokenAux.NextMatch();
+            }
+            tokenAux = Regex.Match(cadena, PARENTESISCIERRE);
+            while (tokenAux.Value != "")
+            {
+                tokens.Add(new Token("PARENTESISCIERRE", tokenAux.Value, pos: tokenAux.Index));
+                tokenAux = tokenAux.NextMatch();
+            }
+            tokenAux = Regex.Match(cadena, CADENA);
+            while (tokenAux.Value != "")
+            {
+                tokens.Add(new Token("CADENA", tokenAux.Value, pos: tokenAux.Index));
+                tokenAux = tokenAux.NextMatch();
+            }
+            tokenAux = Regex.Match(cadena, VARIABLE);
+            while (tokenAux.Value != "")
+            {
+                if (!reservadas.Contains(tokenAux.Value))
+                {
+                    tokens.Add(new Token("VARIABLE", tokenAux.Value, pos: tokenAux.Index));
+                }
+
+                tokenAux = tokenAux.NextMatch();
+            }
+            tokenAux = Regex.Match(cadena, TAUTOLOGIA);
+            while (tokenAux.Value != "")
+            {
+                tokens.Add(new Token("TAUTOLOGIA", tokenAux.Value, pos: tokenAux.Index));
+                tokenAux = tokenAux.NextMatch();
+            }
+            tokenAux = Regex.Match(cadena, CONTRADICCION);
+            while (tokenAux.Value != "")
+            {
+                tokens.Add(new Token("CONTRADICCION", tokenAux.Value, pos: tokenAux.Index));
+                tokenAux = tokenAux.NextMatch();
+            }
+            tokenAux = Regex.Match(cadena, DECIDIBLE);
+            while (tokenAux.Value != "")
+            {
+                tokens.Add(new Token("DECIDIBLE", tokenAux.Value, pos: tokenAux.Index));
+                tokenAux = tokenAux.NextMatch();
+            }
+            tokens.Sort((a, b) => a.Posicion.CompareTo(b.Posicion));
+            return tokens;
+        }
     }
 }

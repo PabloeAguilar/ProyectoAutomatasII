@@ -33,15 +33,24 @@ namespace ProyectoAutomatasII
 
         private void btnVerificar_Click(object sender, RoutedEventArgs e)
         {
+            txtblResultado1.Text = "Resultado del Código";
             string aux = "";
-
+            List<Token> tokens;
             txtblResultado.Text = "";
             try
             {
                 for (int i = 0; i < txtEntrada.LineCount; i++)
                 {
+                    tokens = Class1.Tokens(txtEntrada.GetLineText(i));
+                    txtblResultado1.Text += "\n";
+                    foreach (Token a in tokens)
+                    {
+                        txtblResultado1.Text += a.Nombre + " ";
+                    }
+                    txtblResultado1.Text += "\n";
                     foreach (char l in txtEntrada.GetLineText(i))
                     {
+                        
                         if (l != ' ' || l.ToString() != "" )
                         {
                             aux += l.ToString();
@@ -65,6 +74,8 @@ namespace ProyectoAutomatasII
 
         private void btnLimpiar_Click(object sender, RoutedEventArgs e)
         {
+            Limpiar();
+            /*
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "(*txt)|*.txt";
             ofd.Multiselect = false;
@@ -88,7 +99,7 @@ namespace ProyectoAutomatasII
                     }
                 }
             }
-            
+            */
         }
 
         private void btnVerificar_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -100,6 +111,7 @@ namespace ProyectoAutomatasII
         {
             txtEntrada.Clear();
             txtblResultado.Text = "";
+            txtblResultado1.Text = "Resultado del Código";
         }
 
         private void btnGuardar_Click(object sender, RoutedEventArgs e)
@@ -119,6 +131,34 @@ namespace ProyectoAutomatasII
                 
             }
             MessageBox.Show("Archivo guardado en el escritorio como: reg.txt");
+        }
+
+        private void btnAbrir_Click(object sender, RoutedEventArgs e)
+        {
+
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "(*txt)|*.txt";
+            ofd.Multiselect = false;
+            ofd.Title = "Abrir archivo";
+            //ofd.InitialDirectory = "C:\\Users\\pablo\\Desktop";
+            ofd.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            
+
+            if ((bool)ofd.ShowDialog())
+            {
+                Limpiar();
+                nombreArchivo = ofd.FileName;
+                using (StreamReader red = new StreamReader(ofd.FileName))
+                {
+                    string line;
+                    while ((line = red.ReadLine()) != null)
+                    {
+
+                        txtEntrada.Text += (line + "\r\n");
+
+                    }
+                }
+            }
         }
     }
 }

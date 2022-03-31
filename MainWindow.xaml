@@ -27,7 +27,7 @@
         </Border>
         <StackPanel RenderTransformOrigin="0.505,0.674" VerticalAlignment="Top" Grid.Column="1" Margin="3,6,3,0" Grid.RowSpan="2" >
             <Button x:Name="btnVerificar" Content="Verificar" BorderThickness="1" Background="#FFF2C65B" Click="btnVerificar_Click" Height="59" VerticalAlignment="Stretch" Width="111" Margin="0, 30, 0 ,30"/>
-            <Button x:Name="btnAbrir" Content="Abrir" Background="#FFF2C65B" Click="btnLimpiar_Click" Height="58" Width="111" Margin="0, 30, 0 ,30"/>
+            <Button x:Name="btnAbrir" Content="Abrir" Background="#FFF2C65B" Height="58" Width="111" Margin="0, 30, 0 ,30" Click="btnAbrir_Click"/>
             <Button x:Name="btnLimpiar" Content="Limpiar" Background="#FFF2C65B" Click="btnLimpiar_Click" Height="58" Width="111" Margin="0, 30, 0 ,30"/>
             <Button x:Name="btnGuardar" Content="Guardar como" Background="#FFF2C65B" Height="58" Width="111" Margin="0, 30, 0 ,30" Click="btnGuardar_Click"/>
         </StackPanel>
