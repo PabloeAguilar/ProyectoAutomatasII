@@ -38,7 +38,7 @@
             <Label Content="Tabla de Tipos"/>
         </Border>
         <Border BorderThickness="1" CornerRadius="8" Background="#FF7BD8C0" Margin="6,3,6,5" Grid.Column="4" Grid.Row="1" >
-            <Label Content="Tabla de Simbolos"/>
+            <DataGrid x:Name="tablaSimbolos" IsReadOnly="True"/>
         </Border>
     </Grid>
 </Window>

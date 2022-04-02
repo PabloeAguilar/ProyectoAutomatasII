@@ -25,6 +25,7 @@ namespace ProyectoAutomatasII
     public partial class MainWindow : Window
     {
         string nombreArchivo = ".txt";
+        private List<Token> simbolos = new List<Token>();
         //string direccion = "";
         public MainWindow()
         {
@@ -33,6 +34,9 @@ namespace ProyectoAutomatasII
 
         private void btnVerificar_Click(object sender, RoutedEventArgs e)
         {
+            simbolos = new List<Token>();
+            int posicionAux = 9000;
+            bool hayError = false;
             txtblResultado1.Text = "Resultado del Código";
             string aux = "";
             List<Token> tokens;
@@ -53,7 +57,7 @@ namespace ProyectoAutomatasII
 
                     if (errores.Length > 0)
                     {
-                        int j = 0;
+                        
                         foreach (string error in errores)
                         {
                             if (error != " " && error != "" && error != "\r" && error != "\n")
@@ -66,35 +70,69 @@ namespace ProyectoAutomatasII
                                     }
                                     
                                 }
-                                
-                                
+
+                                hayError = true;
                             }
-                            j++;
 
                         }
                         
                     }
 
-                    foreach (char l in txtEntrada.GetLineText(i))
+                    foreach (Token token in tokens)
                     {
-                        
-                        if (l != ' ' || l.ToString() != "" )
+                        if (token.Nombre == "VARIABLE")
                         {
-                            aux += l.ToString();
+                            bool simboloExiste = false;
+                            foreach (Token token1 in simbolos)
+                            {
+                                if (token.Lexema == token1.Lexema)
+                                {
+                                    simboloExiste = true;
+                                }
+                            }
+                            if (!simboloExiste)
+                            {
+                                if (token.Valor < 0)
+                                {
+                                    token.Valor = 0;
+                                    token.Posicion = ++posicionAux;
+                                }
+                                simbolos.Add(token);
+                            }
+                            
+                            
+                            
                         }
                     }
-                   
-                    if (aux.Length != 0)
+
+                    
+                    // analisis sintactico
+
+                    if (!hayError)
                     {
-                        if (Class1.GLEXPRESION(aux))
-                            txtblResultado.Text += Regex.Replace(txtEntrada.GetLineText(i), "(\\r\\n)*", "") + " //Correcto\n";
-                        else if (aux != "\r\n")
-                            //Indicar tipo de error
-                            txtblResultado.Text += Regex.Replace(txtEntrada.GetLineText(i), "(\\r\\n)*", "") + " //Incorrecto\n";
-                        aux = "";
+                        foreach (char l in txtEntrada.GetLineText(i))
+                        {
+
+                            if (l != ' ' || l.ToString() != "")
+                            {
+                                aux += l.ToString();
+                            }
+                        }
+
+                        if (aux.Length != 0)
+                        {
+                            if (Class1.GLEXPRESION(aux))
+                                txtblResultado.Text += Regex.Replace(txtEntrada.GetLineText(i), "(\\r\\n)*", "") + " //Correcto\n";
+                            else if (aux != "\r\n")
+                                //Indicar tipo de error
+                                txtblResultado.Text += Regex.Replace(txtEntrada.GetLineText(i), "(\\r\\n)*", "") + " //Incorrecto\n";
+                            aux = "";
+                        }
                     }
+                    
                 }
-            
+                tablaSimbolos.ItemsSource = simbolos;
+
             } catch (Exception x) { MessageBox.Show("Exeption" + x); }
             
         }
