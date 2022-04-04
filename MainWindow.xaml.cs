@@ -36,7 +36,7 @@ namespace ProyectoAutomatasII
         {
             simbolos = new List<Token>();
             int posicionAux = 9000;
-            bool hayError = false;
+            bool hayErrorLexico = false;
             txtblResultado1.Text = "Resultado del Código";
             string aux = "";
             List<Token> tokens;
@@ -71,13 +71,13 @@ namespace ProyectoAutomatasII
                                     
                                 }
 
-                                hayError = true;
+                                hayErrorLexico = true;
                             }
 
                         }
                         
                     }
-
+                    //tabla de simbolos
                     foreach (Token token in tokens)
                     {
                         if (token.Nombre == "VARIABLE")
@@ -106,9 +106,9 @@ namespace ProyectoAutomatasII
                     }
 
                     
-                    // analisis sintactico
+                    // analisis lexico
 
-                    if (!hayError)
+                    if (!hayErrorLexico)
                     {
                         foreach (char l in txtEntrada.GetLineText(i))
                         {
@@ -122,7 +122,11 @@ namespace ProyectoAutomatasII
                         if (aux.Length != 0)
                         {
                             if (Class1.GLEXPRESION(aux))
+                            {
                                 txtblResultado.Text += Regex.Replace(txtEntrada.GetLineText(i), "(\\r\\n)*", "") + " //Correcto\n";
+
+                            }
+                                
                             else if (aux != "\r\n")
                                 //Indicar tipo de error
                                 txtblResultado.Text += Regex.Replace(txtEntrada.GetLineText(i), "(\\r\\n)*", "") + " //Incorrecto\n";

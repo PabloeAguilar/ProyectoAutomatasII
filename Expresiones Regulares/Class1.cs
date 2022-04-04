@@ -29,20 +29,20 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
         static string DECIDIBLE = "deci";
 
         static string OPERADOR = "(" + AND + "|" + OR + "|" + ENTONCES + "|" + DOBLEENTONCES + ")";
-        static string EXPRESION = "((" + NOT + ")?" + VARIABLE + ")((" + OPERADOR + ")(((" + NOT + ")?" +
+        public static string EXPRESION = "((" + NOT + ")?" + VARIABLE + ")((" + OPERADOR + ")(((" + NOT + ")?" +
                                    VARIABLE + ")|(" + NOT + ")?" + PARENTESISAPERTURA + "(((" + NOT + ")?" +
                                    VARIABLE + ")(" + OPERADOR + "))*((" + NOT + ")?" + VARIABLE + ")" + PARENTESISCIERRE + "))*";
 
-        static string WLOG = "^(" + IMPRIMIREXPRESION + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE + TERMINADOR + ")($|\\s)";
-        static string WSTR = "^(" + IMPRIMIRCADENA + PARENTESISAPERTURA + CADENA + PARENTESISCIERRE + TERMINADOR + ")($|\\s)";
-        static string WINTRO = "^(" + IMPRIMIRRETORNO + PARENTESISAPERTURA + PARENTESISCIERRE + TERMINADOR + ")($|\\s)";
-        static string WTABLA = "^(" + IMPRIMIRTABLA + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE + TERMINADOR + ")($|\\s)";
+        public static string WLOG = "^(" + IMPRIMIREXPRESION + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE + TERMINADOR + ")($|\\s)";
+        public static string WSTR = "^(" + IMPRIMIRCADENA + PARENTESISAPERTURA + CADENA + PARENTESISCIERRE + TERMINADOR + ")($|\\s)";
+        public static string WINTRO = "^(" + IMPRIMIRRETORNO + PARENTESISAPERTURA + PARENTESISCIERRE + TERMINADOR + ")($|\\s)";
+        public static string WTABLA = "^(" + IMPRIMIRTABLA + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE + TERMINADOR + ")($|\\s)";
 
         static string TAUTO = "(" + TAUTOLOGIA + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE + ")";
         static string CONTRA = "(" + CONTRADICCION + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE + ")";
         static string DECI = "(" + DECIDIBLE + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE + ")";
         static string FUNCIONES = "(" + CONTRA + "|" + TAUTO + "|" + DECI + ")";
-        static string ASIGNACION = "^(" + VARIABLE + ")(" + IGUAL + ")((" + EXPRESION + "|" + FUNCIONES + ")|(" + PARENTESISAPERTURA + ")" +
+        public static string ASIGNACION = "^(" + VARIABLE + ")(" + IGUAL + ")((" + EXPRESION + "|" + FUNCIONES + ")|(" + PARENTESISAPERTURA + ")" +
             "(" + EXPRESION + "|" + FUNCIONES + ")(" + PARENTESISCIERRE + "))(" + TERMINADOR + ")($|\\s)";
         
 
@@ -167,13 +167,18 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
                 return false;        
         }
 
+
+        /// <summary>
+        /// Recibe una cadena y devuelve una lista con los tokens encontrados
+        /// </summary>
+        /// <param name="cadena"></param>
+        /// <returns></returns>
         public static List<Token> Tokens (string cadena)
         {
             List<string> reservadas = new List<string> {
                 IMPRIMIREXPRESION, IMPRIMIRCADENA,
                 IMPRIMIRRETORNO, TAUTOLOGIA, IMPRIMIRTABLA, CONTRADICCION, DECIDIBLE}            ;
-            ///Summary Recibe una cadena y devuelve una lista con los tokens encontrados
-            ///
+
             List<Token> tokens = new List<Token>();
             
             Match tokenAux = Regex.Match(cadena, IMPRIMIRCADENA);
