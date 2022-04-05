@@ -36,7 +36,6 @@ namespace ProyectoAutomatasII
         {
             simbolos = new List<Token>();
             int posicionAux = 9000;
-            bool hayErrorLexico = false;
             txtblResultado1.Text = "Resultado del Código";
             string aux = "";
             List<Token> tokens;
@@ -45,6 +44,7 @@ namespace ProyectoAutomatasII
             {
                 for (int i = 0; i < txtEntrada.LineCount; i++)
                 {
+                    bool hayErrorLexico = false;
                     tokens = Class1.Tokens(txtEntrada.GetLineText(i));
                     txtblResultado1.Text += "\n";
                     foreach (Token a in tokens)
@@ -67,11 +67,12 @@ namespace ProyectoAutomatasII
                                     if (letra != '\r' && letra != '\n')
                                     {
                                         txtblResultado1.Text += "Error en la linea " + (i + 1) + ": Simbolo no definido: " + letra + "\n";
+                                        hayErrorLexico = true;
                                     }
                                     
                                 }
 
-                                hayErrorLexico = true;
+                                
                             }
 
                         }
@@ -110,7 +111,7 @@ namespace ProyectoAutomatasII
 
                     if (!hayErrorLexico)
                     {
-                        foreach (char l in txtEntrada.GetLineText(i))
+                        /*foreach (char l in txtEntrada.GetLineText(i))
                         {
 
                             if (l != ' ' || l.ToString() != "")
@@ -132,6 +133,107 @@ namespace ProyectoAutomatasII
                                 txtblResultado.Text += Regex.Replace(txtEntrada.GetLineText(i), "(\\r\\n)*", "") + " //Incorrecto\n";
                             aux = "";
                         }
+                        */
+                        if (tokens.Count > 0)
+                        {
+
+                            string tipoInstruccion = Semantica.TipoInstruccion(tokens);
+
+                            if (tipoInstruccion == "IMPRIMIRRETORNO")
+                            {
+                                txtblResultado.Text += "Retorno \n\n";
+                            }
+                            else if (tipoInstruccion == "IMPRIMIRCADENA")
+                            {
+                                foreach (Token token in tokens)
+                                {
+                                    if (token.Nombre == "CADENA")
+                                        txtblResultado.Text += token.Lexema + "\n";
+                                }
+
+                            }
+
+                            else if (tipoInstruccion == "ASIGNACION")
+                            {
+                                int valorAux = Semantica.EvaluarExpresion(tokens, simbolos);
+                                bool existeSimbolo = false;
+                                foreach (Token token in simbolos)
+                                {
+                                    if (token.Lexema == tokens[0].Lexema)
+                                    {
+                                        existeSimbolo = true;
+                                        token.Valor = valorAux;
+                                    }
+
+                                }
+                                if (!existeSimbolo)
+                                    simbolos.Add(new Token(Name = "VARIABLE", tokens[0].Lexema, simbolos[simbolos.Count - 1].Posicion + 1, valorAux));
+
+                            }
+                            else if (tipoInstruccion == "IMPRIMIREXPRESION")
+                            {
+                                string auxNombreVariable = "";
+                                foreach (Token token in tokens)
+                                {
+                                    if (token.Nombre == "VARIABLE")
+                                    {
+                                        auxNombreVariable = token.Lexema;
+                                    }
+                                }
+                                bool existeVariable = false;
+                                foreach (Token token in simbolos)
+                                {
+                                    if (token.Lexema == auxNombreVariable)
+                                    {
+                                        existeVariable = true;
+                                        txtblResultado.Text += token.Valor + "\n";
+                                    }
+                                }
+                                if (!existeVariable)
+                                {
+                                    simbolos.Add(new Token("VARIABLE", auxNombreVariable, simbolos[simbolos.Count - 1].Posicion + 1, 0));
+                                    txtblResultado.Text += "0 \n";
+                                }
+                            }
+                            else if(tipoInstruccion == "IMPRIMIRTABLA")
+                            {
+                                List<string> variables = new List<string>();
+                                foreach(Token token in tokens)
+                                {
+                                    if (token.Nombre == "VARIABLE")
+                                        variables.Add(token.Lexema);
+                                }
+                                
+                                List<Token> copiaTokens =  new List<Token>(tokens);
+                                List<List<int>> tablaVerdad = Semantica.TablaDeVerdadParte2(copiaTokens);
+                                if (tablaVerdad.Count > 0)
+                                {
+                                    for (int j = variables.Count - 1; j >= 0; j--)
+                                    {
+                                        txtblResultado.Text += variables[j] + "\t";
+                                    }
+                                    txtblResultado.Text += "Result\n";
+                                    int filas = tablaVerdad[0].Count;
+                                    int columnas = tablaVerdad.Count;
+                                    for (int j = filas - 1 ; j >= 0; j--)
+                                    {
+                                        for (int k = columnas - 2; k >= 0; k--)
+                                        {
+                                            txtblResultado.Text += tablaVerdad[k][j] + "\t";
+                                        }
+                                        txtblResultado.Text += tablaVerdad[tablaVerdad.Count-1][j] + "\t";
+                                        txtblResultado.Text += "\n";
+                                    }
+                                }
+                            }
+
+                            else
+                            {
+                                txtblResultado.Text += tipoInstruccion + ": Linea " + (i+1) + "\n\n";
+                            }
+
+                        } 
+
                     }
                     
                 }

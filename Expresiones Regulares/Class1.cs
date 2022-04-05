@@ -27,6 +27,7 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
         static string IMPRIMIRTABLA = "writetabla";
         static string CONTRADICCION = "contra";
         static string DECIDIBLE = "deci";
+        static string CONSTANTE = "(1|0)";
 
         static string OPERADOR = "(" + AND + "|" + OR + "|" + ENTONCES + "|" + DOBLEENTONCES + ")";
         public static string EXPRESION = "((" + NOT + ")?" + VARIABLE + ")((" + OPERADOR + ")(((" + NOT + ")?" +
@@ -38,11 +39,11 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
         public static string WINTRO = "^(" + IMPRIMIRRETORNO + PARENTESISAPERTURA + PARENTESISCIERRE + TERMINADOR + ")($|\\s)";
         public static string WTABLA = "^(" + IMPRIMIRTABLA + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE + TERMINADOR + ")($|\\s)";
 
-        static string TAUTO = "(" + TAUTOLOGIA + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE + ")";
+        static string TAUTO = "(" + TAUTOLOGIA + PARENTESISAPERTURA + "("+EXPRESION + ")" + PARENTESISCIERRE + ")";
         static string CONTRA = "(" + CONTRADICCION + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE + ")";
         static string DECI = "(" + DECIDIBLE + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE + ")";
         static string FUNCIONES = "(" + CONTRA + "|" + TAUTO + "|" + DECI + ")";
-        public static string ASIGNACION = "^(" + VARIABLE + ")(" + IGUAL + ")((" + EXPRESION + "|" + FUNCIONES + ")|(" + PARENTESISAPERTURA + ")" +
+        public static string ASIGNACION = "^(" + VARIABLE + ")(" + IGUAL + ")((" + EXPRESION + "|" + FUNCIONES + "|" + CONSTANTE + ")|(" + PARENTESISAPERTURA + ")" +
             "(" + EXPRESION + "|" + FUNCIONES + ")(" + PARENTESISCIERRE + "))(" + TERMINADOR + ")($|\\s)";
         
 
@@ -291,6 +292,13 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
             while (tokenAux.Value != "")
             {
                 tokens.Add(new Token("DECIDIBLE", tokenAux.Value, pos: tokenAux.Index));
+                tokenAux = tokenAux.NextMatch();
+            }
+            tokens.Sort((a, b) => a.Posicion.CompareTo(b.Posicion));
+            tokenAux = Regex.Match(cadena, CONSTANTE);
+            while (tokenAux.Value != "")
+            {
+                tokens.Add(new Token("CONSTANTE", tokenAux.Value, pos: tokenAux.Index, int.Parse(tokenAux.Value)));
                 tokenAux = tokenAux.NextMatch();
             }
             tokens.Sort((a, b) => a.Posicion.CompareTo(b.Posicion));
