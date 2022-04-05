@@ -295,6 +295,8 @@ namespace ProyectoAutomatasII
             MessageBox.Show("Archivo guardado en el escritorio como: reg.txt");
         }
 
+
+
         private void btnAbrir_Click(object sender, RoutedEventArgs e)
         {
 
@@ -321,6 +323,39 @@ namespace ProyectoAutomatasII
                     }
                 }
             }
+        }
+
+        private void btnGuardarResultado_Click(object sender, RoutedEventArgs e)
+        {
+            using (StreamWriter writer = new StreamWriter(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\reg.log"), append: false, Encoding.ASCII))
+            {
+                int i = 0;
+                string[] lineas = txtblResultado.Text.Split('\n');
+
+                foreach (string linea in lineas)
+                {
+                    writer.WriteLine(linea);
+                    i++;
+                }
+                //                writer.Flush();
+                writer.Close();
+
+            }
+            using (StreamWriter writer = new StreamWriter(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\tokens.log"), append: false, Encoding.ASCII))
+            {
+                int i = 0;
+                string[] lineas = txtblResultado1.Text.Split('\n');
+
+                foreach (string linea in lineas)
+                {
+                    writer.WriteLine(linea);
+                    i++;
+                }
+                //                writer.Flush();
+                writer.Close();
+
+            }
+            MessageBox.Show("Archivos guardados en el escritorio como: reg.log y tokens.log");
         }
     }
 }

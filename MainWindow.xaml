@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ProyectoAutomatasII"
         mc:Ignorable="d"
         Title="Heraclito" Height="423" Width="1267" WindowStyle="SingleBorderWindow" FontFamily="Consolas" FontSize="16" WindowState="Maximized" WindowStartupLocation="CenterScreen" 
-        MinHeight="500">
+        MinHeight="700">
     <Grid Background="#FF647BE7">
         <Grid.RowDefinitions>
             <RowDefinition Height="61*"/>
@@ -30,6 +30,7 @@
             <Button x:Name="btnAbrir" Content="Abrir" Background="#FFF2C65B" Height="58" Width="111" Margin="0, 30, 0 ,30" Click="btnAbrir_Click"/>
             <Button x:Name="btnLimpiar" Content="Limpiar" Background="#FFF2C65B" Click="btnLimpiar_Click" Height="58" Width="111" Margin="0, 30, 0 ,30"/>
             <Button x:Name="btnGuardar" Content="Guardar como" Background="#FFF2C65B" Height="58" Width="111" Margin="0, 30, 0 ,30" Click="btnGuardar_Click"/>
+            <Button x:Name="btnGuardarResultado" Content="Guardar resultados" Background="#FFF2C65B" Height="58" Width="111" Margin="0, 30, 0 ,30" Click="btnGuardarResultado_Click"/>
         </StackPanel>
         <Border BorderThickness="1" CornerRadius="8" Background="#FF7BD8C0" Margin="7,10,7,13" Grid.Column="3" Grid.RowSpan="2" >
             <TextBlock x:Name="txtblResultado1" Margin="11,11,10,9" TextWrapping="Wrap" Background="White" Text="Resultado del Código"/>

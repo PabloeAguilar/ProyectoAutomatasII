@@ -241,7 +241,7 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
             while (tokenAux.Value != "")
             {
                 Match tokenAux2 = Regex.Match(cadena, DOBLEENTONCES);
-                if (!(tokenAux2.Index+1 == tokenAux.Index))
+                if (!(tokenAux2.Index + 1 == tokenAux.Index))
                 {
                     tokens.Add(new Token("ENTONCES", tokenAux.Value, pos: tokenAux.Index));
                 }
@@ -285,9 +285,21 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
             tokenAux = Regex.Match(cadena, VARIABLE);
             while (tokenAux.Value != "")
             {
-                if (!reservadas.Contains(tokenAux.Value))
+                if (!reservadas.Contains(tokenAux.Value) )
                 {
-                    tokens.Add(new Token("VARIABLE", tokenAux.Value, pos: tokenAux.Index));
+                    Match tokenAux2 = Regex.Match(cadena, CADENA);
+                    if (!(tokenAux.Index >= tokenAux2.Index && tokenAux.Index <= tokenAux2.Index+tokenAux2.Length && tokenAux2.Success))
+                    {
+                        tokens.Add(new Token("VARIABLE", tokenAux.Value, pos: tokenAux.Index));
+                    }
+                    else
+                    {
+                        if (!tokenAux2.Success)
+                            tokens.Add(new Token("VARIABLE", tokenAux.Value, pos: tokenAux.Index));
+                    }
+                        
+
+
                 }
 
                 tokenAux = tokenAux.NextMatch();
