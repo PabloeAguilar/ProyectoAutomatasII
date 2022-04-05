@@ -39,8 +39,8 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
         public static string WINTRO = "^(" + IMPRIMIRRETORNO + PARENTESISAPERTURA + PARENTESISCIERRE + TERMINADOR + ")($|\\s)";
         public static string WTABLA = "^(" + IMPRIMIRTABLA + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE + TERMINADOR + ")($|\\s)";
 
-        static string TAUTO = "(" + TAUTOLOGIA + PARENTESISAPERTURA + "("+EXPRESION + ")" + PARENTESISCIERRE + ")";
-        static string CONTRA = "(" + CONTRADICCION + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE + ")";
+        public static string TAUTO = "(" + TAUTOLOGIA + PARENTESISAPERTURA + "("+EXPRESION + ")" + PARENTESISCIERRE + ")";
+        public static string CONTRA = "(" + CONTRADICCION + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE + ")";
         static string DECI = "(" + DECIDIBLE + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE + ")";
         static string FUNCIONES = "(" + CONTRA + "|" + TAUTO + "|" + DECI + ")";
         public static string ASIGNACION = "^(" + VARIABLE + ")(" + IGUAL + ")((" + EXPRESION + "|" + FUNCIONES + "|" + CONSTANTE + ")|(" + PARENTESISAPERTURA + ")" +
@@ -230,24 +230,40 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
                 tokens.Add(new Token("OR", tokenAux.Value, pos: tokenAux.Index));
                 tokenAux = tokenAux.NextMatch();
             }
-            tokenAux = Regex.Match(cadena, NOT);
-            while (tokenAux.Value != "")
-            {
-                tokens.Add(new Token("NOT", tokenAux.Value, pos: tokenAux.Index));
-                tokenAux = tokenAux.NextMatch();
-            }
-            tokenAux = Regex.Match(cadena, ENTONCES);
-            while (tokenAux.Value != "")
-            {
-                tokens.Add(new Token("ENTONCES", tokenAux.Value, pos: tokenAux.Index));
-                tokenAux = tokenAux.NextMatch();
-            }
+
             tokenAux = Regex.Match(cadena, DOBLEENTONCES);
             while (tokenAux.Value != "")
             {
                 tokens.Add(new Token("DOBLEENTONCES", tokenAux.Value, pos: tokenAux.Index));
                 tokenAux = tokenAux.NextMatch();
             }
+            tokenAux = Regex.Match(cadena, ENTONCES);
+            while (tokenAux.Value != "")
+            {
+                Match tokenAux2 = Regex.Match(cadena, DOBLEENTONCES);
+                if (!(tokenAux2.Index+1 == tokenAux.Index))
+                {
+                    tokens.Add(new Token("ENTONCES", tokenAux.Value, pos: tokenAux.Index));
+                }
+                
+                tokenAux = tokenAux.NextMatch();
+            }
+            
+            tokenAux = Regex.Match(cadena, NOT);
+            while (tokenAux.Value != "")
+            {
+                Match tokenAux2 = Regex.Match(cadena, DOBLEENTONCES);
+                if (!(tokenAux2.Index+1 == tokenAux.Index))
+                {
+                    tokenAux2 = Regex.Match(cadena, ENTONCES);
+                    if (tokenAux2.Index != tokenAux.Index)
+                        tokens.Add(new Token("NOT", tokenAux.Value, pos: tokenAux.Index));
+                }
+                
+                tokenAux = tokenAux.NextMatch();
+            }
+            
+            
             tokenAux = Regex.Match(cadena, PARENTESISAPERTURA);
             while (tokenAux.Value != "")
             {

@@ -30,6 +30,9 @@ namespace ProyectoAutomatasII
         public MainWindow()
         {
             InitializeComponent();
+            List<Tipo> tipos = new List<Tipo>();
+            tipos.Add(new Tipo("Bool", "(1 | 0)"));
+            tablaTipos.ItemsSource = tipos;
         }
 
         private void btnVerificar_Click(object sender, RoutedEventArgs e)
@@ -89,6 +92,7 @@ namespace ProyectoAutomatasII
                                 if (token.Lexema == token1.Lexema)
                                 {
                                     simboloExiste = true;
+                                    token.Valor = token1.Valor;
                                 }
                             }
                             if (!simboloExiste)
@@ -111,29 +115,6 @@ namespace ProyectoAutomatasII
 
                     if (!hayErrorLexico)
                     {
-                        /*foreach (char l in txtEntrada.GetLineText(i))
-                        {
-
-                            if (l != ' ' || l.ToString() != "")
-                            {
-                                aux += l.ToString();
-                            }
-                        }
-
-                        if (aux.Length != 0)
-                        {
-                            if (Class1.GLEXPRESION(aux))
-                            {
-                                txtblResultado.Text += Regex.Replace(txtEntrada.GetLineText(i), "(\\r\\n)*", "") + " //Correcto\n";
-
-                            }
-                                
-                            else if (aux != "\r\n")
-                                //Indicar tipo de error
-                                txtblResultado.Text += Regex.Replace(txtEntrada.GetLineText(i), "(\\r\\n)*", "") + " //Incorrecto\n";
-                            aux = "";
-                        }
-                        */
                         if (tokens.Count > 0)
                         {
 
@@ -203,8 +184,8 @@ namespace ProyectoAutomatasII
                                     if (token.Nombre == "VARIABLE")
                                         variables.Add(token.Lexema);
                                 }
-                                
-                                List<Token> copiaTokens =  new List<Token>(tokens);
+
+                                List<Token> copiaTokens = new List<Token>(tokens.ToList()) ;
                                 List<List<int>> tablaVerdad = Semantica.TablaDeVerdadParte2(copiaTokens);
                                 if (tablaVerdad.Count > 0)
                                 {
@@ -225,6 +206,16 @@ namespace ProyectoAutomatasII
                                         txtblResultado.Text += "\n";
                                     }
                                 }
+                            }
+                            else if(tipoInstruccion == "TAUTOLOGIA")
+                            {
+                                int esTauto = Semantica.EvaluarTautologia(tokens);
+                                txtblResultado.Text += esTauto + "\n";
+                            }
+                            else if (tipoInstruccion == "CONTRADICCION")
+                            {
+                                int esTauto = Semantica.EvaluarTautologia(tokens);
+                                txtblResultado.Text += esTauto + "\n";
                             }
 
                             else

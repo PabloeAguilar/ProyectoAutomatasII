@@ -68,6 +68,7 @@
     </Compile>
     <Compile Include="Expresiones Regulares\Class1.cs" />
     <Compile Include="Expresiones Regulares\Semantica.cs" />
+    <Compile Include="Expresiones Regulares\Tipo.cs" />
     <Compile Include="Expresiones Regulares\Token.cs" />
     <Compile Include="Expresiones Regulares\VerificacionErroresLexicos.cs" />
     <Compile Include="MainWindow.xaml.cs">

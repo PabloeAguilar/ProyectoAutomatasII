@@ -35,7 +35,11 @@
             <TextBlock x:Name="txtblResultado1" Margin="11,11,10,9" TextWrapping="Wrap" Background="White" Text="Resultado del Código"/>
         </Border>
         <Border BorderThickness="1" CornerRadius="8" Background="#FF7BD8C0" Margin="6,10,6,3" Grid.Column="4" >
-            <Label Content="Tabla de Tipos"/>
+            <StackPanel>
+                <Label Content="Tabla de Tipos"/>
+                <DataGrid x:Name="tablaTipos" IsReadOnly="True"/>
+            </StackPanel>
+            
         </Border>
         <Border BorderThickness="1" CornerRadius="8" Background="#FF7BD8C0" Margin="6,3,6,5" Grid.Column="4" Grid.Row="1" >
             <DataGrid x:Name="tablaSimbolos" IsReadOnly="True"/>
