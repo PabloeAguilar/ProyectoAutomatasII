@@ -38,9 +38,9 @@ namespace ProyectoAutomatasII
         private void btnVerificar_Click(object sender, RoutedEventArgs e)
         {
             simbolos = new List<Token>();
-            int posicionAux = 9000;
+            
             txtblResultado1.Text = "Resultado del Código";
-            string aux = "";
+            
             List<Token> tokens;
             txtblResultado.Text = "";
             try
@@ -82,34 +82,7 @@ namespace ProyectoAutomatasII
                         
                     }
                     //tabla de simbolos
-                    foreach (Token token in tokens)
-                    {
-                        if (token.Nombre == "VARIABLE")
-                        {
-                            bool simboloExiste = false;
-                            foreach (Token token1 in simbolos)
-                            {
-                                if (token.Lexema == token1.Lexema)
-                                {
-                                    simboloExiste = true;
-                                    token.Valor = token1.Valor;
-                                }
-                            }
-                            if (!simboloExiste)
-                            {
-                                if (token.Valor < 0)
-                                {
-                                    token.Valor = 0;
-                                    token.Posicion = ++posicionAux;
-                                }
-                                simbolos.Add(token);
-                            }
-                            
-                            
-                            
-                        }
-                    }
-
+                    
                     
                     // analisis lexico
 
@@ -122,10 +95,12 @@ namespace ProyectoAutomatasII
 
                             if (tipoInstruccion == "IMPRIMIRRETORNO")
                             {
+                                _ = Class1.generarTablaSimbolos(tokens, simbolos);
                                 txtblResultado.Text += "Retorno \n\n";
                             }
                             else if (tipoInstruccion == "IMPRIMIRCADENA")
                             {
+                                _ = Class1.generarTablaSimbolos(tokens, simbolos);
                                 foreach (Token token in tokens)
                                 {
                                     if (token.Nombre == "CADENA")
@@ -136,6 +111,7 @@ namespace ProyectoAutomatasII
 
                             else if (tipoInstruccion == "ASIGNACION")
                             {
+                                _ = Class1.generarTablaSimbolos(tokens, simbolos);
                                 int valorAux = Semantica.EvaluarExpresion(tokens, simbolos);
                                 bool existeSimbolo = false;
                                 foreach (Token token in simbolos)
@@ -153,6 +129,7 @@ namespace ProyectoAutomatasII
                             }
                             else if (tipoInstruccion == "IMPRIMIREXPRESION")
                             {
+                                _ = Class1.generarTablaSimbolos(tokens, simbolos);
                                 string auxNombreVariable = "";
                                 foreach (Token token in tokens)
                                 {
@@ -178,22 +155,25 @@ namespace ProyectoAutomatasII
                             }
                             else if(tipoInstruccion == "IMPRIMIRTABLA")
                             {
+                                _ = Class1.generarTablaSimbolos(tokens, simbolos);
                                 List<string> variables = new List<string>();
-                                foreach(Token token in tokens)
+                                List<Token> auxVariables = new List<Token>();
+                                auxVariables = Class1.generarTablaSimbolos(tokens, auxVariables);
+                                foreach (Token token in auxVariables)
                                 {
                                     if (token.Nombre == "VARIABLE")
                                         variables.Add(token.Lexema);
                                 }
 
-                                List<Token> copiaTokens = new List<Token>(tokens.ToList()) ;
+                                List<Token> copiaTokens = Semantica.CopiarLista(tokens);
                                 List<List<int>> tablaVerdad = Semantica.TablaDeVerdadParte2(copiaTokens);
                                 if (tablaVerdad.Count > 0)
                                 {
-                                    for (int j = variables.Count - 1; j >= 0; j--)
+                                    for (int j = 0; j < variables.Count; j++)
                                     {
                                         txtblResultado.Text += variables[j] + "\t";
                                     }
-                                    txtblResultado.Text += "Result\n";
+                                    /*txtblResultado.Text += "Result\n";
                                     int filas = tablaVerdad[0].Count;
                                     int columnas = tablaVerdad.Count;
                                     for (int j = filas - 1 ; j >= 0; j--)
@@ -204,17 +184,31 @@ namespace ProyectoAutomatasII
                                         }
                                         txtblResultado.Text += tablaVerdad[tablaVerdad.Count-1][j] + "\t";
                                         txtblResultado.Text += "\n";
+                                    }*/
+                                    txtblResultado.Text += "Result\n";
+                                    int filas = tablaVerdad[0].Count;
+                                    int columnas = tablaVerdad.Count;
+                                    for (int j = filas - 1; j >= 0; j--)
+                                    {
+                                        for (int k = 0; k < columnas-1 ; k++)
+                                        {
+                                            txtblResultado.Text += tablaVerdad[k][j] + "\t";
+                                        }
+                                        txtblResultado.Text += tablaVerdad[tablaVerdad.Count - 1][j] + "\t";
+                                        txtblResultado.Text += "\n";
                                     }
                                 }
                             }
                             else if(tipoInstruccion == "TAUTOLOGIA")
                             {
+                                _ = Class1.generarTablaSimbolos(tokens, simbolos);
                                 int esTauto = Semantica.EvaluarTautologia(tokens);
                                 txtblResultado.Text += esTauto + "\n";
                             }
                             else if (tipoInstruccion == "CONTRADICCION")
                             {
-                                int esTauto = Semantica.EvaluarTautologia(tokens);
+                                _ = Class1.generarTablaSimbolos(tokens, simbolos);
+                                int esTauto = Semantica.EvaluarContradiccion(tokens);
                                 txtblResultado.Text += esTauto + "\n";
                             }
 
@@ -285,7 +279,7 @@ namespace ProyectoAutomatasII
                 while (i < txtEntrada.LineCount)
                 {
                     linea = txtEntrada.GetLineText(i);
-                    writer.WriteLine(linea);
+                    writer.Write(linea);
                     i++;
                 }
 //                writer.Flush();
@@ -299,7 +293,6 @@ namespace ProyectoAutomatasII
 
         private void btnAbrir_Click(object sender, RoutedEventArgs e)
         {
-
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "(*txt)|*.txt";
             ofd.Multiselect = false;

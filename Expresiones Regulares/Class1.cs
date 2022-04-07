@@ -332,5 +332,42 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
             tokens.Sort((a, b) => a.Posicion.CompareTo(b.Posicion));
             return tokens;
         }
+
+        public static List<Token> generarTablaSimbolos(List<Token> tokens, List<Token> simbolos)
+        {
+            int posicionAux = 9000;
+            if (simbolos.Count > 0)
+            {
+                posicionAux = simbolos[simbolos.Count - 1].Posicion;    
+            }
+            
+            List<Token> listacopia = Semantica.CopiarLista(tokens);
+            foreach (Token token in listacopia)
+            {
+                if (token.Nombre == "VARIABLE")
+                {
+                    bool simboloExiste = false;
+                    foreach (Token token1 in simbolos)
+                    {
+                        if (token.Lexema == token1.Lexema)
+                        {
+                            simboloExiste = true;
+                            token.Valor = token1.Valor;
+                        }
+                    }
+                    if (!simboloExiste)
+                    {
+                        if (token.Valor < 0)
+                        {
+                            token.Valor = 0;
+                            token.Posicion = ++posicionAux;
+                        }
+                        simbolos.Add(token);
+                    }
+                }
+            }
+            return simbolos;
+
+        }
     }
 }

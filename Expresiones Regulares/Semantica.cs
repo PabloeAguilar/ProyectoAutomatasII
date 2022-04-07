@@ -19,13 +19,12 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
         /// <summary>
         /// Metodo que genera la parte de los 1s y 0s correspondientes a las variables de una tabla de verdad
         /// </summary>
-        /// <param name="tokens">Lista de tokens ordenados con sintaxis correcta</param>
+        /// <param name="tokens">Lista de tokens de la expresion con sintaxis correcta</param>
         /// <returns>Lista de listas de valores para tabla de verdad</returns>
         /// 
 
         public static List<List<int>> TablaVerdadParte1(List<Token> tokens)
         {
-
 
             int numeroTokens = 0;
             List<Token> variables = new List<Token>();
@@ -40,11 +39,11 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
             int numColumnas = variables.Count;
             double numFilas = Math.Pow(2, numColumnas);
             List<List<int>> tabla = new List<List<int>>();
-
             for (i = 0; i < numColumnas; i++)
             {
-                bool primerCambio = true;
-                bool tocaUno = false;
+                double cambio = Math.Pow(2, i);
+                int contadorCambio = 0;
+                bool tocaUno = true ;
                 List<int> valores = new List<int>();
                 for (int j = 0; j < numFilas; j++)
                 {
@@ -66,48 +65,34 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
                         if (tocaUno)
                         {
                             valores.Add(1);
+                            contadorCambio++;
                             //tocaUno = false;
                         }
                         else
                         {
                             valores.Add(0);
+                            contadorCambio++;
                             //tocaUno = true;
                         }
                     }
-                    if (tabla.Count > 0 && tabla[i - 1][j] != valores[j])
+                    if (contadorCambio >= cambio)
                     {
-                        if (tocaUno && !primerCambio)
+                        if (tocaUno)
                         {
                             //valores.Add(1);
                             tocaUno = false;
-                            primerCambio = true;
+                            contadorCambio = 0;
                         }
                         else
                         {
                             //valores.Add(0);
-                            primerCambio = true;
                             tocaUno = true;
+                            contadorCambio = 0;
                         }
                     }
+                    
+                        
 
-                    /*if (j % Math.Pow(2, i + 1) == 0)
-                    {
-                        if (tocaUno)
-                            tocaUno = false;
-                        else
-                            tocaUno = true;
-                    }
-                    */
-                    /*if (Math.Pow(2, numeroFilas) )
-                    //bool tocaUno;
-                    if (Math.Pow(2, numeroFilas) % ((i+1)*2) == 2)
-                    {
-                        valores.Add(0);
-                    }
-                    else
-                    {
-                        valores.Add(1);
-                    }*/
 
                 }
                 tabla.Add(valores);
@@ -126,39 +111,25 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
         static List<Token> EvaluarNegacion(List<Token> tokens, List<Token> simbolos)
         {
             i = 0;
-            Token token1 = new Token();
             List<Token> nuevaExpresion = tokens;
-            for (int j = 0; j < tokens.Count; j++)
+            for (int j = 0; j < nuevaExpresion.Count; j++)
             {
-
-                if (tokens[j].Nombre == "NOT")
+                if (nuevaExpresion[j].Nombre == "NOT")
                 {
-                    foreach (Token auxToken1 in simbolos)
+                    if (nuevaExpresion[j + 1].Valor == 1)
                     {
-                        if (auxToken1.Lexema == nuevaExpresion[j + 1].Lexema)
-                        {
-                            token1 = auxToken1;
-                        }
-                    }
-                    nuevaExpresion.Remove(tokens[j]);
-                    nuevaExpresion[j].Nombre = "VARIABLE";
-                    if (nuevaExpresion[j].Valor == 0)
-                    {
-                        nuevaExpresion[j].Valor = 1;
-                        token1.Valor = 1;
+                        nuevaExpresion.Remove(nuevaExpresion[j]);
+                        nuevaExpresion[j].Nombre = "VARIABLE";
+                        nuevaExpresion[j].Valor = 0;
                     }
                     else
                     {
-                        nuevaExpresion[j].Valor = 0;
-                        token1.Valor = 0;
+                        nuevaExpresion.Remove(nuevaExpresion[j]);
+                        nuevaExpresion[j].Valor = 1;
+                        nuevaExpresion[j].Nombre = "VARIABLE";
                     }
-
                 }
-                i++;
             }
-
-
-
             return nuevaExpresion;
         }
 
@@ -171,52 +142,28 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
         static List<Token> EvaluarAnd(List<Token> tokens, List<Token> simbolos)
         {
             i = 0;
-            Token token1 = new Token();
-            Token token2 = new Token();
-
-
             List<Token> nuevaExpresion = tokens;
-
-            for (int j = 0; j < tokens.Count; j++)
+            for (int j = 0; j < nuevaExpresion.Count; j++)
             {
                 if (nuevaExpresion[j].Nombre == "AND")
                 {
-                    foreach (Token auxToken1 in simbolos)
-                    {
-                        if (auxToken1.Lexema == nuevaExpresion[j - 1].Lexema)
-                        {
-
-                            token1 = auxToken1;
-                        }
-                    }
-                    foreach (Token auxToken1 in simbolos)
-                    {
-                        if (auxToken1.Lexema == nuevaExpresion[j + 1].Lexema)
-                        {
-
-                            token2 = auxToken1;
-                        }
-                    }
                     if (nuevaExpresion[j - 1].Valor == 1 && nuevaExpresion[j + 1].Valor == 1)
                     {
                         nuevaExpresion.Remove(nuevaExpresion[j - 1]);
-                        nuevaExpresion.Remove(nuevaExpresion[j + 1]);
-                        nuevaExpresion[j].Nombre = "VARIABLE";
-                        nuevaExpresion[j].Valor = 1;
+                        nuevaExpresion.Remove(nuevaExpresion[j]);
+                        nuevaExpresion[j - 1].Nombre = "VARIABLE";
+                        nuevaExpresion[j - 1].Valor = 1;
                     }
                     else
                     {
                         nuevaExpresion.Remove(nuevaExpresion[j - 1]);
-                        nuevaExpresion.Remove(nuevaExpresion[j + 1]);
-                        nuevaExpresion[j].Nombre = "VARIABLE";
-                        nuevaExpresion[j].Valor = 0;
+                        nuevaExpresion.Remove(nuevaExpresion[j]);
+                        nuevaExpresion[j - 1].Valor = 0;
+                        nuevaExpresion[j - 1].Nombre = "VARIABLE";
                     }
-
+                    j--;
                 }
-
-                i++;
             }
-
             return nuevaExpresion;
         }
 
@@ -238,17 +185,17 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
                     {
                         nuevaExpresion.Remove(nuevaExpresion[j - 1]);
                         nuevaExpresion.Remove(nuevaExpresion[j]);
-                        nuevaExpresion[j].Nombre = "VARIABLE";
-                        nuevaExpresion[j].Valor = 1;
+                        nuevaExpresion[j-1].Nombre = "VARIABLE";
+                        nuevaExpresion[j-1].Valor = 1;
                     }
                     else
                     {
                         nuevaExpresion.Remove(nuevaExpresion[j - 1]);
-                        nuevaExpresion.Remove(nuevaExpresion[j + 1]);
-                        nuevaExpresion[j].Valor = 0;
-                        nuevaExpresion[j].Nombre = "VARIABLE";
+                        nuevaExpresion.Remove(nuevaExpresion[j]);
+                        nuevaExpresion[j-1].Valor = 0;
+                        nuevaExpresion[j-1].Nombre = "VARIABLE";
                     }
-
+                    j--;
                 }
             }
             return nuevaExpresion;
@@ -262,12 +209,7 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
         /// <param name="simbolos">Lista de simbolos identificados</param>
         static List<Token> EvaluarEntonces(List<Token> tokens, List<Token> simbolos)
         {
-            EvaluarNegacion(tokens, simbolos);
             i = 0;
-            Token token1 = new Token();
-            Token token2 = new Token();
-
-
             List<Token> nuevaExpresion = tokens;
             for (int j = 0; j < nuevaExpresion.Count; j++)
             {
@@ -277,31 +219,26 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
                     {
                         nuevaExpresion.Remove(nuevaExpresion[j - 1]);
                         nuevaExpresion.Remove(nuevaExpresion[j]);
-                        nuevaExpresion[j].Nombre = "VARIABLE";
-                        nuevaExpresion[j].Valor = 0;
+                        nuevaExpresion[j - 1].Nombre = "VARIABLE";
+                        nuevaExpresion[j - 1].Valor = 0;
                     }
                     else
                     {
                         nuevaExpresion.Remove(nuevaExpresion[j - 1]);
-                        nuevaExpresion.Remove(nuevaExpresion[j + 1]);
-                        nuevaExpresion[j].Valor = 1;
-                        nuevaExpresion[j].Nombre = "VARIABLE";
+                        nuevaExpresion.Remove(nuevaExpresion[j]);
+                        nuevaExpresion[j - 1].Valor = 1;
+                        nuevaExpresion[j - 1].Nombre = "VARIABLE";
                     }
-
+                    j--;
                 }
             }
-
             return nuevaExpresion;
         }
 
         static public List<Token> EvaluarDobleEntonces(List<Token> tokens, List<Token> simbolos)
         {
-            EvaluarNegacion(tokens, simbolos);
             i = 0;
-
-
             List<Token> nuevaExpresion = tokens;
-
             for (int j = 0; j < nuevaExpresion.Count; j++)
             {
                 if (nuevaExpresion[j].Nombre == "DOBLEENTONCES")
@@ -310,23 +247,20 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
                     {
                         nuevaExpresion.Remove(nuevaExpresion[j - 1]);
                         nuevaExpresion.Remove(nuevaExpresion[j]);
-                        nuevaExpresion[j].Nombre = "VARIABLE";
-                        nuevaExpresion[j].Valor = 1;
+                        nuevaExpresion[j - 1].Nombre = "VARIABLE";
+                        nuevaExpresion[j - 1].Valor = 1;
                     }
                     else
                     {
                         nuevaExpresion.Remove(nuevaExpresion[j - 1]);
                         nuevaExpresion.Remove(nuevaExpresion[j]);
-                        nuevaExpresion[j].Valor = 0;
-                        nuevaExpresion[j].Nombre = "VARIABLE";
+                        nuevaExpresion[j - 1].Valor = 0;
+                        nuevaExpresion[j - 1].Nombre = "VARIABLE";
                     }
-
+                    j--;
                 }
             }
-
-
             return nuevaExpresion;
-
         }
 
 
@@ -488,30 +422,40 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
             return "Error en la expresion";
         }
 
-        static Token[] ValidarExpresionTablaVerdad(List<Token> tokens)
+        static List<Token> ValidarExpresionTablaVerdad(List<Token> tokens)
         {
-            int i = 0;
-            Token[] auxTokensExpresion = new Token[0];
-            foreach (Token token in tokens)
+            if(tokens[1].Nombre == "IGUAL")
             {
-                if (token.Nombre == "PARENTESISAPERTURA")
-                {
-                    auxTokensExpresion = new Token[tokens.Count - 4];
-                    tokens.CopyTo(i + 1, auxTokensExpresion, 0, tokens.Count - 4);
-                }
-                i++;
+                tokens.RemoveAt(0);
+                tokens.RemoveAt(0);
             }
-            if (auxTokensExpresion.Length > 0)
-            {
 
-                foreach (Token token in auxTokensExpresion)
+            List<string> variables = new List<string>();
+            
+            if (tokens.Count > 0)
+            {
+                for (int z = 0; z < tokens.Count; z++)
                 {
-                    if (token.Nombre != "VARIABLE" && token.Nombre != "AND" && token.Nombre != "OR" && token.Nombre != "NOT")
-                        return new Token[0];
+                    if (tokens[z].Nombre != "VARIABLE" && tokens[z].Nombre != "AND" && tokens[z].Nombre != "OR" && tokens[z].Nombre != "NOT" &&
+                        tokens[z].Nombre != "ENTONCES" && tokens[z].Nombre != "DOBLEENTONCES")
+                    {
+                        tokens.RemoveAt(z);
+                        z--;
+                        if (z>0)
+                        {
+                            
+                            if (tokens[z].Nombre != "VARIABLE" && tokens[z].Nombre != "AND" && tokens[z].Nombre != "OR" && tokens[z].Nombre != "NOT" &&
+                        tokens[z].Nombre != "ENTONCES" && tokens[z].Nombre != "DOBLEENTONCES")
+                            {
+                                tokens.RemoveAt(z);
+                            }
+                        }
+                        
+                    }
                 }
-                return auxTokensExpresion;
+                return tokens;
             }
-            return new Token[0];
+            return new List<Token>();
         }
 
 
@@ -521,49 +465,74 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
         /// <param name="tokens"></param>
         /// <returns></returns>
         public static List<List<int>> TablaDeVerdadParte2(List<Token> tokens)
-        {
-            List<int> valoresOriginales = new List<int>();
+        {           
             List<List<int>> tablaDeVerdad = new List<List<int>>();
-            Token[] tokensExpresion = ValidarExpresionTablaVerdad(tokens);
-            if (tokensExpresion.Length > 0)
+            List<Token> copiaTokens1 = CopiarLista(tokens);
+            List<Token> tokensExpresion = ValidarExpresionTablaVerdad(copiaTokens1);
+            if (tokensExpresion.Count > 0)
             {
-                List<List<int>> valores = TablaVerdadParte1(tokens);
+                List<Token> listacopia = CopiarLista(tokensExpresion);
+                List<Token> simbolos = new List<Token>();
+                foreach (Token token in listacopia)
+                {
+                    if (token.Nombre == "VARIABLE")
+                    {
+                        bool simboloExiste = false;
+                        foreach (Token token1 in simbolos)
+                        {
+                            if (token.Lexema == token1.Lexema)
+                            {
+                                simboloExiste = true;
+                                token.Valor = token1.Valor;
+                            }
+                        }
+                        if (!simboloExiste)
+                        {
+                            if (token.Valor < 0)
+                            {
+                                token.Valor = 0;
+                                token.Posicion = 0;
+                            }
+                            simbolos.Add(token);
+                        }
+                    }
+                }
+
+                List<List<int>> valores = TablaVerdadParte1(simbolos);
                 int j = valores[0].Count; //cuenta el numero de renglones
                 List<int> resultados = new List<int>();
+
+
                 for (int k = 0; k < j; k++) // ciclo para evaluar todas las lineas de la tabla de verdad
                 {
-                    int auxCuentaVariable = 0;
-                    List<Token> simbolos = new List<Token>();
-                    //string variableActual = "";
-                    foreach (Token token in tokensExpresion) // genera una nueva tabla de simbolos
+                    copiaTokens1 = CopiarLista(tokens);
+                    tokensExpresion = ValidarExpresionTablaVerdad(copiaTokens1);
+                    int contadorAux = 0;
+                    foreach (Token token2 in simbolos)
                     {
-                        if (token.Nombre == "VARIABLE")
+                        if (token2.Nombre == "VARIABLE")
                         {
-                            valoresOriginales.Add(token.Valor);
-                            token.Valor = valores[auxCuentaVariable++][k];
-
-                            //simbolos.Add(new Token("VARIABLE", token.Lexema, 0, valores[auxCuentaVariable++][k]));
+                            token2.Valor = valores[contadorAux][k];
+                            contadorAux++;
                         }
-
+                        
                     }
-                    List<Token> copiaTokens = new List<Token>(tokens);
-                    resultados.Add(EvaluarExpresion(copiaTokens, simbolos));
+                    foreach(Token token1 in simbolos)
+                    {
+                        foreach(Token token in copiaTokens1)
+                        {
+                            if (token1.Nombre == "VARIABLE" && token1.Lexema == token.Lexema)
+                            {
+                                token.Valor = token1.Valor;
+                            }
+                        }
+                    }
+                    resultados.Add(EvaluarExpresion(tokensExpresion, simbolos));
 
                 }
                 valores.Add(resultados);
                 tablaDeVerdad = valores;
             }
-            int l = 0;
-            foreach (Token token in tokensExpresion)
-            {
-                if (token.Nombre == "VARIABLE")
-                {
-                    token.Valor = valoresOriginales[l];
-                    l++;
-                }
-            }
-
-
             return tablaDeVerdad;
 
         }
@@ -596,6 +565,17 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
             }
 
             return esTauto;
+        }
+
+        public static List<Token> CopiarLista(List<Token> tokens)
+        {
+            List<Token> tokens1 = new List<Token>();
+            foreach(Token token in tokens )
+            {
+                Token aux = new Token(token.Nombre, token.Lexema, token.Posicion, token.Valor);
+                tokens1.Add(aux);
+            }
+            return tokens1;
         }
 
     }
