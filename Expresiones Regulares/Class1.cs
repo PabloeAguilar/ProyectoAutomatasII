@@ -45,6 +45,7 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
         static string FUNCIONES = "(" + CONTRA + "|" + TAUTO + "|" + DECI + ")";
         public static string ASIGNACION = "^(" + VARIABLE + ")(" + IGUAL + ")((" + EXPRESION + "|" + FUNCIONES + "|" + CONSTANTE + ")|(" + PARENTESISAPERTURA + ")" +
             "(" + EXPRESION + "|" + FUNCIONES + ")(" + PARENTESISCIERRE + "))(" + TERMINADOR + ")($|\\s)";
+
         
 
         public static bool TTerminador(string cadena)
@@ -338,7 +339,7 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
             int posicionAux = 9000;
             if (simbolos.Count > 0)
             {
-                posicionAux = simbolos[simbolos.Count - 1].Posicion;    
+                posicionAux = simbolos[simbolos.Count - 1].Posicion;
             }
             
             List<Token> listacopia = Semantica.CopiarLista(tokens);

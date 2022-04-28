@@ -274,6 +274,20 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
             int i = 0;
             int resultado;
             List<Token> nuevaExpresion = tokens;
+            foreach(Token token2 in nuevaExpresion)
+            {
+                if(token2.Nombre == "VARIABLE")
+                {
+                    foreach(Token token in simbolos)
+                    {
+                        if (token.Lexema == token2.Lexema)
+                        {
+                            token2.Valor = token.Valor;
+                        }
+                    }
+                }
+            }
+
             nuevaExpresion = EvaluarNegacion(nuevaExpresion, simbolos);
             nuevaExpresion = EvaluarAnd(nuevaExpresion, simbolos);
             nuevaExpresion = EvaluarOR(nuevaExpresion, simbolos);
@@ -318,7 +332,7 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
         /// <returns></returns>
         public static string TipoInstruccion(List<Token> tokens)
         {
-            //string resultado = "";
+
             string cadenaAux = "";
             int parentesisApertura = 0;
             int parentesisCierre = 0;
@@ -338,12 +352,28 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
             {
                 return "Falta terminador";
             }
+            for (int z = 0; z < tokens.Count; z++)
+            {
+                if (tokens[z].Nombre == "IGUAL")
+                {
+                    if (tokens[z+1].Nombre != "EXPRESION" &&
+                        tokens[z + 1].Nombre != "VARIABLE" &&
+                        tokens[z+1].Nombre != "CONSTANTE")
+                    {
+                        return "Error en la expresion despues del =";
+                    }
+                }
+            }
 
             if (tokens[0].Nombre == "IMPRIMIRRETORNO")
             {
                 if (Regex.IsMatch(cadenaAux, Class1.WINTRO))
                 {
                     return "IMPRIMIRRETORNO";
+                }
+                else
+                {
+                    return "Error al utilizar la función de retorno de carro";
                 }
 
             }
@@ -355,7 +385,7 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
                 }
                 else if (!Regex.IsMatch(cadenaAux, Class1.WLOG))
                 {
-                    return "Error en expresion";
+                    return "Error en la expresion a imprimir";
                 }
 
             }
@@ -378,9 +408,9 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
                 {
                     return "ASIGNACION";
                 }
-                else if (!Regex.IsMatch(cadenaAux, Class1.EXPRESION))
+                else //if (!Regex.IsMatch(cadenaAux, Class1.EXPRESION))
                 {
-                    return "Error en la expresion";
+                    return "Error en la expresion a asignar";
                 }
             }
             else if (tokens[0].Nombre == "IMPRIMIRTABLA")
@@ -391,7 +421,7 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
                 }
                 else if (!Regex.IsMatch(cadenaAux, Class1.EXPRESION))
                 {
-                    return "Error en la expresion";
+                    return "Error en la expresion para imprimir la tabla";
                 }
             }
             else if (tokens[0].Nombre == "TAUTOLOGIA")
