@@ -22,7 +22,7 @@
         <Border BorderThickness="1" CornerRadius="8" Background="#FF7BD8C0" Margin="9,10,9,13" Grid.RowSpan="2" >
             <TextBox x:Name="txtEntrada" TextWrapping="Wrap" Margin="9,9,9,9" AcceptsReturn="True"/>
         </Border>
-        <Border BorderThickness="1" CornerRadius="8" Background="#FF7BD8C0" Margin="8,10,7,13" Grid.Column="2" Grid.RowSpan="2" >
+        <Border BorderThickness="1" CornerRadius="8" Background="#FF7BD8C0" Margin="8,10,7,13" Grid.Column="2" Grid.ColumnSpan="2" Grid.RowSpan="2" >
             <TextBlock x:Name="txtblResultado" Margin="11,11,10,9" TextWrapping="Wrap" Background="White"/>
         </Border>
         <StackPanel RenderTransformOrigin="0.505,0.674" VerticalAlignment="Top" Grid.Column="1" Margin="3,6,3,0" Grid.RowSpan="2" >
@@ -32,9 +32,6 @@
             <Button x:Name="btnGuardar" Content="Guardar como" Background="#FFF2C65B" Height="58" Width="111" Margin="0, 30, 0 ,30" Click="btnGuardar_Click"/>
             <Button x:Name="btnGuardarResultado" Content="Guardar resultados" Background="#FFF2C65B" Height="58" Width="111" Margin="0, 30, 0 ,30" Click="btnGuardarResultado_Click"/>
         </StackPanel>
-        <Border BorderThickness="1" CornerRadius="8" Background="#FF7BD8C0" Margin="7,10,7,13" Grid.Column="3" Grid.RowSpan="2" >
-            <TextBlock x:Name="txtblResultado1" Margin="11,11,10,9" TextWrapping="Wrap" Background="White" Text="Resultado del Código"/>
-        </Border>
         <Border BorderThickness="1" CornerRadius="8" Background="#FF7BD8C0" Margin="6,10,6,3" Grid.Column="4" >
             <StackPanel>
                 <Label Content="Tabla de Tipos"/>

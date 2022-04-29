@@ -19,8 +19,10 @@ namespace ProyectoAutomatasII
         public MainWindow()
         {
             InitializeComponent();
-            List<Tipo> tipos = new List<Tipo>();
-            tipos.Add(new Tipo("Bool", "(1 | 0)"));
+            List<Tipo> tipos = new List<Tipo>
+            {
+                new Tipo("Bool", "(1 | 0)")
+            };
             tablaTipos.ItemsSource = tipos;
         }
 
@@ -33,7 +35,7 @@ namespace ProyectoAutomatasII
         {
             simbolos = new List<Token>();
             
-            txtblResultado1.Text = "Resultado del Código";
+            //txtblResultado1.Text = "Resultado del Código";
             
             List<Token> tokens;
             txtblResultado.Text = "";
@@ -43,12 +45,12 @@ namespace ProyectoAutomatasII
                 {
                     bool hayErrorLexico = false;
                     tokens = Class1.Tokens(txtEntrada.GetLineText(i));
-                    txtblResultado1.Text += "\n";
+                    /*txtblResultado1.Text += "\n";
                     foreach (Token a in tokens)
                     {
                         txtblResultado1.Text += a.Nombre + " ";
                     }
-                    txtblResultado1.Text += "\n";
+                    txtblResultado1.Text += "\n";*/
                     string errorLexico = VerificacionErroresLexicos.EliminacionTokens(txtEntrada.GetLineText(i), tokens);
                     string[] errores = errorLexico.Split(' ');
 
@@ -63,7 +65,7 @@ namespace ProyectoAutomatasII
                                 {
                                     if (letra != '\r' && letra != '\n')
                                     {
-                                        txtblResultado1.Text += "Error en la linea " + (i + 1) + ": Simbolo no definido: " + letra + "\n";
+                                        //txtblResultado1.Text += "Error en la linea " + (i + 1) + ": Simbolo no definido: " + letra + "\n";
                                         hayErrorLexico = true;
                                     }
                                     
@@ -225,7 +227,7 @@ namespace ProyectoAutomatasII
         {
             txtEntrada.Clear();
             txtblResultado.Text = "";
-            txtblResultado1.Text = "Resultado del Código";
+            //txtblResultado1.Text = "Resultado del Código";
         }
 
         private void btnGuardar_Click(object sender, RoutedEventArgs e)
@@ -290,7 +292,7 @@ namespace ProyectoAutomatasII
                 writer.Close();
 
             }
-            using (StreamWriter writer = new StreamWriter(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\tokens.log"), append: false, Encoding.ASCII))
+            /*using (StreamWriter writer = new StreamWriter(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\tokens.log"), append: false, Encoding.ASCII))
             {
                 int i = 0;
                 string[] lineas = txtblResultado1.Text.Split('\n');
@@ -302,8 +304,8 @@ namespace ProyectoAutomatasII
                 }
                 writer.Close();
 
-            }
-            _ = MessageBox.Show("Archivos guardados en el escritorio como: reg.log y tokens.log");
+            }*/
+            _ = MessageBox.Show("Archivos guardados en el escritorio como: reg.log");
         }
     }
 }
