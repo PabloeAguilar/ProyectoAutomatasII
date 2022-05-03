@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows;
 using Microsoft.Win32;
 using ProyectoAutomatasII.Expresiones_Regulares;
+using Proviant;
 
 namespace ProyectoAutomatasII
 {
@@ -33,10 +34,8 @@ namespace ProyectoAutomatasII
         /// <param name="e"></param>
         private void btnVerificar_Click(object sender, RoutedEventArgs e)
         {
-            simbolos = new List<Token>();
-            
-            //txtblResultado1.Text = "Resultado del Código";
-            
+            simbolos = new List<Token>();           
+            //txtblResultado1.Text = "Resultado del Código";            
             List<Token> tokens;
             txtblResultado.Text = "";
             try
@@ -63,9 +62,10 @@ namespace ProyectoAutomatasII
                             {
                                 foreach (char letra in error)
                                 {
+
                                     if (letra != '\r' && letra != '\n')
                                     {
-                                        //txtblResultado1.Text += "Error en la linea " + (i + 1) + ": Simbolo no definido: " + letra + "\n";
+                                        txtblResultado.Text += "Error en la linea " + (i + 1) + ": Simbolo no definido: " + letra + "\n";
                                         hayErrorLexico = true;
                                     }
                                     
@@ -106,19 +106,22 @@ namespace ProyectoAutomatasII
                             else if (tipoInstruccion == "ASIGNACION")
                             {
                                 _ = Class1.generarTablaSimbolos(tokens, simbolos);
-                                int valorAux = Semantica.EvaluarExpresion(tokens, simbolos);
+                                var expr = new BooleanAlgebraExpression(VerificacionErroresLexicos.GenerarExpresionParaEvaluar(tokens, simbolos));
+                                bool valorbool = expr.Evaluate();
+                                int valorAux(bool valor) =>  valor ? 1 : 0;
+                                //int valorAux = Semantica.EvaluarExpresion(tokens, simbolos);
                                 bool existeSimbolo = false;
                                 foreach (Token token in simbolos)
                                 {
                                     if (token.Lexema == tokens[0].Lexema)
                                     {
                                         existeSimbolo = true;
-                                        token.Valor = valorAux;
+                                        token.Valor = valorAux(valorbool);
                                     }
 
                                 }
                                 if (!existeSimbolo)
-                                    simbolos.Add(new Token(Name = "VARIABLE", tokens[0].Lexema, simbolos[simbolos.Count - 1].Posicion + 1, valorAux));
+                                    simbolos.Add(new Token(Name = "VARIABLE", tokens[0].Lexema, simbolos[simbolos.Count - 1].Posicion + 1, valorAux(valorbool)));
 
                             }
                             else if (tipoInstruccion == "IMPRIMIREXPRESION")

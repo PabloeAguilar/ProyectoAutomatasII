@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Proviant;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -358,7 +359,10 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
                 {
                     if (tokens[z+1].Nombre != "EXPRESION" &&
                         tokens[z + 1].Nombre != "VARIABLE" &&
-                        tokens[z+1].Nombre != "CONSTANTE")
+                        tokens[z+1].Nombre != "CONSTANTE" &&
+                        tokens[z + 1].Nombre != "PARENTESISAPERTURA" &&
+                        tokens[z+1].Nombre != "TAUTOLOGIA" &&
+                        tokens[z+1].Nombre != "CONTRADICCION")
                     {
                         return "Error en la expresion despues del =";
                     }
@@ -547,6 +551,7 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
                         }
                         
                     }
+                    /*
                     foreach(Token token1 in simbolos)
                     {
                         foreach(Token token in copiaTokens1)
@@ -556,8 +561,11 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
                                 token.Valor = token1.Valor;
                             }
                         }
-                    }
-                    resultados.Add(EvaluarExpresion(tokensExpresion, simbolos));
+                    }*/
+                    var expr = new BooleanAlgebraExpression(VerificacionErroresLexicos.GenerarExpresionParaTabla(tokens, simbolos));
+                    bool valorbool = expr.Evaluate();
+                    int valorAux(bool valor) => valor ? 1 : 0;
+                    resultados.Add(valorAux(valorbool));
 
                 }
                 valores.Add(resultados);
