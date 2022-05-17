@@ -106,22 +106,84 @@ namespace ProyectoAutomatasII
                             else if (tipoInstruccion == "ASIGNACION")
                             {
                                 _ = Class1.generarTablaSimbolos(tokens, simbolos);
-                                var expr = new BooleanAlgebraExpression(VerificacionErroresLexicos.GenerarExpresionParaEvaluar(tokens, simbolos));
-                                bool valorbool = expr.Evaluate();
-                                int valorAux(bool valor) =>  valor ? 1 : 0;
-                                //int valorAux = Semantica.EvaluarExpresion(tokens, simbolos);
+                                int valorAux(bool valor) => valor ? 1 : 0;
+                                int valorResultado = 0;
                                 bool existeSimbolo = false;
-                                foreach (Token token in simbolos)
+                                var expr = new BooleanAlgebraExpression(VerificacionErroresLexicos.GenerarExpresionParaEvaluar(tokens, simbolos));
+                                if (tokens[2].Nombre == "TAUTOLOGIA")
                                 {
-                                    if (token.Lexema == tokens[0].Lexema)
+                                    List<Token> copia = new List<Token>();
+                                    for (int h = 2; h < tokens.Count; h++)
                                     {
-                                        existeSimbolo = true;
-                                        token.Valor = valorAux(valorbool);
+                                        copia.Add(new Token
+                                        {
+                                            Lexema = tokens[h].Lexema,
+                                            Valor = tokens[h].Valor,
+                                            Nombre = tokens[h].Nombre,
+                                            Posicion = tokens[h].Posicion
+
+                                        });
+                                    }
+                                    valorResultado= Semantica.EvaluarTautologia(copia);
+                                    foreach (Token token in simbolos)
+                                    {
+                                        if (token.Lexema == tokens[0].Lexema)
+                                        {
+                                            existeSimbolo = true;
+                                            token.Valor = valorResultado;
+                                            
+                                        }
+
                                     }
 
                                 }
+                                else if (tokens[2].Nombre == "CONTRADICCION")
+                                {
+                                    List<Token> copia = new List<Token>();
+                                    for (int h = 2; h < tokens.Count; h++)
+                                    {
+                                        copia.Add(new Token
+                                        {
+                                            Lexema = tokens[h].Lexema,
+                                            Valor = tokens[h].Valor,
+                                            Nombre = tokens[h].Nombre,
+                                            Posicion = tokens[h].Posicion
+
+                                        });
+                                    }
+                                    valorResultado = Semantica.EvaluarContradiccion(copia);
+                                    foreach (Token token in simbolos)
+                                    {
+                                        if (token.Lexema == tokens[0].Lexema)
+                                        {
+                                            existeSimbolo = true;
+                                            token.Valor = valorResultado;
+                                        }
+
+                                    }
+
+                                }
+                                else
+                                {
+                                    bool valorbool = expr.Evaluate();
+                                    foreach (Token token in simbolos)
+                                    {
+                                        if (token.Lexema == tokens[0].Lexema)
+                                        {
+                                            existeSimbolo = true;
+                                            token.Valor = valorAux(valorbool);
+                                            valorResultado = token.Valor;
+                                        }
+
+                                    }
+                                }
                                 if (!existeSimbolo)
-                                    simbolos.Add(new Token(Name = "VARIABLE", tokens[0].Lexema, simbolos[simbolos.Count - 1].Posicion + 1, valorAux(valorbool)));
+                                    simbolos.Add(new Token(Name = "VARIABLE", tokens[0].Lexema, simbolos[simbolos.Count - 1].Posicion + 1, valorResultado));
+
+
+                                //int valorAux = Semantica.EvaluarExpresion(tokens, simbolos);
+
+
 
                             }
                             else if (tipoInstruccion == "IMPRIMIREXPRESION")

@@ -43,9 +43,8 @@ namespace ProyectoAutomatasII.Expresiones_Regulares
         public static string CONTRA = "(" + CONTRADICCION + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE + ")";
         static string DECI = "(" + DECIDIBLE + PARENTESISAPERTURA + EXPRESION + PARENTESISCIERRE + ")";
         static string FUNCIONES = "(" + CONTRA + "|" + TAUTO + "|" + DECI + ")";
-        public static string ASIGNACION = "^(" + VARIABLE + ")" +
-                                                                    "(" + IGUAL + ")" +
-                                                                                        "(((" + EXPRESION + "|" + CONSTANTE + ")|(" + PARENTESISAPERTURA + ")(" + EXPRESION +  ")(" + PARENTESISCIERRE + "))+ | " + FUNCIONES + " ) (" + TERMINADOR + ")($|\\s)";
+        public static string ASIGNACION = "^(" + VARIABLE + ")(" + IGUAL + ")((" + EXPRESION + "|" + FUNCIONES + "|" + CONSTANTE + ")|(" + PARENTESISAPERTURA + ")" +
+            "(" + EXPRESION + "|" + FUNCIONES + ")(" + PARENTESISCIERRE + "))(" + TERMINADOR + ")($|\\s)";                                                                             
 
         
 
