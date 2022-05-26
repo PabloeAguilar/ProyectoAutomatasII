@@ -14,6 +14,8 @@ namespace ProyectoAutomatasII
     /// </summary>
     public partial class MainWindow : Window
     {
+        List<string> resultados = new List<string>();
+        bool hayErroresPrograma = false;
         string nombreArchivo = ".txt";
         private List<Token> simbolos = new List<Token>();
         //string direccion = "";
@@ -34,7 +36,9 @@ namespace ProyectoAutomatasII
         /// <param name="e"></param>
         private void btnVerificar_Click(object sender, RoutedEventArgs e)
         {
-            simbolos = new List<Token>();           
+            simbolos = new List<Token>();
+            hayErroresPrograma = false;
+            resultados = new List<string>();
             //txtblResultado1.Text = "Resultado del Código";            
             List<Token> tokens;
             txtblResultado.Text = "";
@@ -67,11 +71,13 @@ namespace ProyectoAutomatasII
                                     {
                                         txtblResultado.Text += "Error en la linea " + (i + 1) + ": Simbolo no definido: " + letra + "\n";
                                         hayErrorLexico = true;
+                                        hayErroresPrograma = true;
+                                        break;
                                     }
                                     
                                 }
-
                                 
+
                             }
 
                         }
@@ -90,7 +96,8 @@ namespace ProyectoAutomatasII
                             if (tipoInstruccion == "IMPRIMIRRETORNO")
                             {
                                 _ = Class1.generarTablaSimbolos(tokens, simbolos);
-                                txtblResultado.Text += "Retorno \n\n";
+                                //txtblResultado.Text += "\n";
+                                resultados.Add("\n");
                             }
                             else if (tipoInstruccion == "IMPRIMIRCADENA")
                             {
@@ -98,7 +105,11 @@ namespace ProyectoAutomatasII
                                 foreach (Token token in tokens)
                                 {
                                     if (token.Nombre == "CADENA")
-                                        txtblResultado.Text += token.Lexema + "\n";
+                                    {
+                                        //txtblResultado.Text += token.Lexema;// + "\n";
+                                        resultados.Add(token.Lexema);
+                                    }    
+                                        
                                 }
 
                             }
@@ -190,27 +201,81 @@ namespace ProyectoAutomatasII
                             {
                                 _ = Class1.generarTablaSimbolos(tokens, simbolos);
                                 string auxNombreVariable = "";
-                                foreach (Token token in tokens)
+                                if (tokens[2].Nombre == "VARIABLE")
                                 {
-                                    if (token.Nombre == "VARIABLE")
+                                    foreach (Token token in tokens)
                                     {
-                                        auxNombreVariable = token.Lexema;
+                                        if (token.Nombre == "VARIABLE")
+                                        {
+                                            auxNombreVariable = token.Lexema;
+                                        }
+                                    }
+                                    bool existeVariable = false;
+                                    foreach (Token token in simbolos)
+                                    {
+                                        if (token.Lexema == auxNombreVariable)
+                                        {
+                                            existeVariable = true;
+                                            //txtblResultado.Text += token.Valor;
+                                            resultados.Add(token.Valor.ToString()); ;
+                                        }
+                                    }
+                                    if (!existeVariable)
+                                    {
+                                        simbolos.Add(new Token("VARIABLE", auxNombreVariable, simbolos[simbolos.Count - 1].Posicion + 1, 0));
+                                        //txtblResultado.Text += "0";
+                                        resultados.Add("0");
                                     }
                                 }
-                                bool existeVariable = false;
-                                foreach (Token token in simbolos)
+                                else
                                 {
-                                    if (token.Lexema == auxNombreVariable)
+                                    int valorAux(bool valor) => valor ? 1 : 0;
+                                    int valorResultado = 0;
+                                    var expr = new BooleanAlgebraExpression(VerificacionErroresLexicos.GenerarExpresionParaEvaluar(tokens, simbolos));
+                                    if (tokens[2].Nombre == "TAUTOLOGIA")
                                     {
-                                        existeVariable = true;
-                                        txtblResultado.Text += token.Valor + "\n";
+                                        List<Token> copia = new List<Token>();
+                                        for (int h = 2; h < tokens.Count; h++)
+                                        {
+                                            copia.Add(new Token
+                                            {
+                                                Lexema = tokens[h].Lexema,
+                                                Valor = tokens[h].Valor,
+                                                Nombre = tokens[h].Nombre,
+                                                Posicion = tokens[h].Posicion
+
+                                            });
+                                        }
+                                        valorResultado = Semantica.EvaluarTautologia(copia);
+                                        //txtblResultado.Text += valorResultado.ToString();
+                                        resultados.Add(valorResultado.ToString());
+                                    }
+                                    else if (tokens[2].Nombre == "CONTRADICCION")
+                                    {
+                                        List<Token> copia = new List<Token>();
+                                        for (int h = 2; h < tokens.Count; h++)
+                                        {
+                                            copia.Add(new Token
+                                            {
+                                                Lexema = tokens[h].Lexema,
+                                                Valor = tokens[h].Valor,
+                                                Nombre = tokens[h].Nombre,
+                                                Posicion = tokens[h].Posicion
+
+                                            });
+                                        }
+                                        valorResultado = Semantica.EvaluarContradiccion(copia);
+                                        txtblResultado.Text += valorResultado.ToString();
+                                    }
+                                    else
+                                    {
+                                        bool valorbool = expr.Evaluate();
+                                        valorResultado = valorAux(valorbool);
+                                        //txtblResultado.Text += valorResultado.ToString();
+                                        resultados.Add(valorResultado.ToString());
                                     }
                                 }
-                                if (!existeVariable)
-                                {
-                                    simbolos.Add(new Token("VARIABLE", auxNombreVariable, simbolos[simbolos.Count - 1].Posicion + 1, 0));
-                                    txtblResultado.Text += "0 \n";
-                                }
+                                
                             }
                             else if(tipoInstruccion == "IMPRIMIRTABLA")
                             {
@@ -230,19 +295,24 @@ namespace ProyectoAutomatasII
                                 {
                                     for (int j = 0; j < variables.Count; j++)
                                     {
-                                        txtblResultado.Text += variables[j] + "\t";
+                                        //txtblResultado.Text += variables[j] + "\t";
+                                        resultados.Add(variables[j] + "\t");
                                     }
-                                    txtblResultado.Text += "Result\n";
+                                    //txtblResultado.Text += "Result\n";
+                                    resultados.Add("Result\n");
                                     int filas = tablaVerdad[0].Count;
                                     int columnas = tablaVerdad.Count;
                                     for (int j = filas - 1; j >= 0; j--)
                                     {
                                         for (int k = 0; k < columnas-1 ; k++)
                                         {
-                                            txtblResultado.Text += tablaVerdad[k][j] + "\t";
+                                            //txtblResultado.Text += tablaVerdad[k][j] + "\t";
+                                            resultados.Add(tablaVerdad[k][j] + "\t");
                                         }
-                                        txtblResultado.Text += tablaVerdad[tablaVerdad.Count - 1][j] + "\t";
-                                        txtblResultado.Text += "\n";
+                                        //txtblResultado.Text += tablaVerdad[tablaVerdad.Count - 1][j] + "\t";
+                                        //txtblResultado.Text += "\n";
+                                        resultados.Add(tablaVerdad[tablaVerdad.Count - 1][j] + "\t");
+                                        resultados.Add("\n");
                                     }
                                 }
                             }
@@ -250,26 +320,40 @@ namespace ProyectoAutomatasII
                             {
                                 _ = Class1.generarTablaSimbolos(tokens, simbolos);
                                 int esTauto = Semantica.EvaluarTautologia(tokens);
-                                txtblResultado.Text += esTauto + "\n";
+                                //txtblResultado.Text += esTauto + "\n";
                             }
                             else if (tipoInstruccion == "CONTRADICCION")
                             {
                                 _ = Class1.generarTablaSimbolos(tokens, simbolos);
                                 int esTauto = Semantica.EvaluarContradiccion(tokens);
-                                txtblResultado.Text += esTauto + "\n";
+                                //txtblResultado.Text += esTauto + "\n";
                             }
 
                             else
                             {
                                 txtblResultado.Text += tipoInstruccion + ": Linea " + (i+1) + "\n\n";
+                                hayErroresPrograma = true;
+                                break;
                             }
 
                         } 
 
                     }
+                    else
+                    {
+                        break;
+                    }
                     
                 }
-                tablaSimbolos.ItemsSource = simbolos;
+                if (!hayErroresPrograma)
+                {
+                    tablaSimbolos.ItemsSource = simbolos;
+                    foreach(string resultado in resultados)
+                    {
+                        txtblResultado.Text += resultado;
+                    }
+                }
+                
 
             } catch (Exception x) { MessageBox.Show("Exeption" + x); }
             
@@ -292,6 +376,8 @@ namespace ProyectoAutomatasII
         {
             txtEntrada.Clear();
             txtblResultado.Text = "";
+            simbolos = new List<Token>();
+            tablaSimbolos.ItemsSource = simbolos;
             //txtblResultado1.Text = "Resultado del Código";
         }
 
@@ -372,5 +458,8 @@ namespace ProyectoAutomatasII
             }*/
             _ = MessageBox.Show("Archivos guardados en el escritorio como: reg.log");
         }
+
+
+
     }
 }
