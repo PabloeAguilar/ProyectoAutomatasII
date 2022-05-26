@@ -34,6 +34,7 @@ namespace ProyectoAutomatasII
         /// <param name="e"></param>
         private void btnVerificar_Click(object sender, RoutedEventArgs e)
         {
+            Generador.Prueba();
             simbolos = new List<Token>();           
             //txtblResultado1.Text = "Resultado del Código";            
             List<Token> tokens;
