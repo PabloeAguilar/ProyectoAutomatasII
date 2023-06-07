@@ -15,6 +15,8 @@ namespace ProyectoAutomatasII
     public partial class MainWindow : Window
     {
         List<string> resultados = new List<string>();
+        List<string> codigoEnsamblador = new List<string>(); 
+        List<string> asignaciones = new List<string>();
         bool hayErroresPrograma = false;
         string nombreArchivo = ".txt";
         private List<Token> simbolos = new List<Token>();
@@ -37,11 +39,19 @@ namespace ProyectoAutomatasII
         private void btnVerificar_Click(object sender, RoutedEventArgs e)
         {
             simbolos = new List<Token>();
+            
+            codigoEnsamblador.Clear();
+            codigoEnsamblador.Add(".code");
+            codigoEnsamblador.Add("org 100h");
+            codigoEnsamblador.Add("begin: jmp short inicio");
+            codigoEnsamblador.Add(".data");
+            
             hayErroresPrograma = false;
             resultados = new List<string>();
             //txtblResultado1.Text = "Resultado del Código";            
             List<Token> tokens;
             txtblResultado.Text = "";
+
             try
             {
                 for (int i = 0; i < txtEntrada.LineCount; i++)
@@ -184,6 +194,7 @@ namespace ProyectoAutomatasII
                                             existeSimbolo = true;
                                             token.Valor = valorAux(valorbool);
                                             valorResultado = token.Valor;
+                                            codigoEnsamblador.Add(token.Lexema + " db " + valorResultado.ToString());
                                         }
 
                                     }
@@ -207,6 +218,7 @@ namespace ProyectoAutomatasII
                                     {
                                         if (token.Nombre == "VARIABLE")
                                         {
+                                            Console.Write("a");
                                             auxNombreVariable = token.Lexema;
                                         }
                                     }
@@ -348,9 +360,31 @@ namespace ProyectoAutomatasII
                 if (!hayErroresPrograma)
                 {
                     tablaSimbolos.ItemsSource = simbolos;
-                    foreach(string resultado in resultados)
+                    foreach (string resultado in resultados)
                     {
                         txtblResultado.Text += resultado;
+
+                    }
+                    foreach (string variable in asignaciones)
+                    {
+                        codigoEnsamblador.Add(variable);
+                    }
+
+                    codigoEnsamblador.Add(".data ends");
+                    codigoEnsamblador.Add("inicio proc near");
+                    codigoEnsamblador.Add("ret");
+                    using (StreamWriter writer = new StreamWriter(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\reg.log"), append: false, Encoding.ASCII))
+                    {
+                        
+
+                        foreach (string linea in codigoEnsamblador)
+                        {
+                            writer.WriteLine(linea + "\n");
+                            
+                        }
+                        //                writer.Flush();
+                        writer.Close();
+
                     }
                 }
                 
@@ -383,21 +417,26 @@ namespace ProyectoAutomatasII
 
         private void btnGuardar_Click(object sender, RoutedEventArgs e)
         {
-            using (StreamWriter writer  = new StreamWriter(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\reg.txt"), append:false, Encoding.ASCII))
+            var direccion = new SaveFileDialog();
+            direccion.Filter = "Archivos de texto(*.txt)|*.txt";
+            if (direccion.ShowDialog() == true)
             {
-                int i = 0;
-                string linea;
-                while (i < txtEntrada.LineCount)
+                using (StreamWriter writer = new StreamWriter(direccion.FileName, append: false, Encoding.ASCII))
                 {
-                    linea = txtEntrada.GetLineText(i);
-                    writer.Write(linea);
-                    i++;
+                    int i = 0;
+                    string linea;
+                    while (i < txtEntrada.LineCount)
+                    {
+                        linea = txtEntrada.GetLineText(i);
+                        writer.Write(linea);
+                        i++;
+                    }
+                    //                writer.Flush();
+                    writer.Close();
+                    MessageBox.Show("Archivo guardado en el escritorio como: " + direccion.FileName);
                 }
-//                writer.Flush();
-                writer.Close();
-                
             }
-            MessageBox.Show("Archivo guardado en el escritorio como: reg.txt");
+            
         }
 
 
@@ -429,34 +468,28 @@ namespace ProyectoAutomatasII
 
         private void btnGuardarResultado_Click(object sender, RoutedEventArgs e)
         {
-            using (StreamWriter writer = new StreamWriter(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\reg.log"), append: false, Encoding.ASCII))
+            var direccion = new SaveFileDialog();
+            direccion.Filter = "Archivos de texto(*.txt)|*.txt";
+            if (direccion.ShowDialog() == true)
             {
-                int i = 0;
-                string[] lineas = txtblResultado.Text.Split('\n');
-
-                foreach (string linea in lineas)
+                using (StreamWriter writer = new StreamWriter(direccion.FileName, append: false, Encoding.ASCII))
+                //using (StreamWriter writer = new StreamWriter(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\resultados.log"), append: false, Encoding.ASCII))
                 {
-                    writer.WriteLine(linea);
-                    i++;
-                }
-                //                writer.Flush();
-                writer.Close();
+                    int i = 0;
+                    string[] lineas = txtblResultado.Text.Split('\n');
 
+                    foreach (string linea in lineas)
+                    {
+                        writer.WriteLine(linea);
+                        i++;
+                    }
+                    //                writer.Flush();
+                    writer.Close();
+
+                }
+                _ = MessageBox.Show("Archivos guardados en el escritorio como: "+ direccion.FileName);
             }
-            /*using (StreamWriter writer = new StreamWriter(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\tokens.log"), append: false, Encoding.ASCII))
-            {
-                int i = 0;
-                string[] lineas = txtblResultado1.Text.Split('\n');
-
-                foreach (string linea in lineas)
-                {
-                    writer.WriteLine(linea);
-                    i++;
-                }
-                writer.Close();
-
-            }*/
-            _ = MessageBox.Show("Archivos guardados en el escritorio como: reg.log");
+            
         }
 
 
