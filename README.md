@@ -7,6 +7,6 @@ Utiliza un conjunto reducido de instrucciones.
 Es capaz de evaluar instrucciones booleanas mediate el uso de variables. 
 En el estado actual es capaz de generar la declaración de variables en lenguaje ensamblador.
 
-No hay más actualizaciones de código planeadas. 
+No hay más actualizaciones de código planeadas. Si es que se suben actualizaciones, serán porque no estaba chido como estaba el repositorio. 
 
 Agradecimientos especiales a genfood, ya que para la elaboración de este proyecto se ha utilizado el nuget Proviant.
